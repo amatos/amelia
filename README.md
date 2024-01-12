@@ -1,93 +1,406 @@
-# archery
+# 'Amelia' is an Arch Linux installer, written in Bash.
+
+-----------------------------------------------------
+The main concept behind this installer is the trinity: Automation, Interaction and Portability.
+
+'Amelia' is mainly targeted towards the average user, but power users might find it useful too.
 
 
 
-## Getting started
+- ## Automation:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+There is no support for older non-GPT platforms, as the installer makes use of the "Discoverable Partitions Specification", to automate detection of the underlying partitions, perform a sanity-check (and other checks throughout the installation process) based on your preferences, and auto-mount or auto-activate partitions when necessary (e.g. swap), without the use of the fstab file.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+In particular, when the "ext4" filesystem is being used, the "genfstab" command is not even executed in the script, and your "fstab" file will be empty (except only if "Swapfile" use is desired), as systemd's automation takes care of it.
 
-## Add your files
+In the same manner, "systemd" (instead of "base" & "udev") will be used in your initramfs, as it provides the tools for the said automation.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+The installation process completes in "one-go", meaning after it's over and the system has rebooted, you're basically done.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/prism7/archery.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+- ## Interaction:
 
-- [ ] [Set up project integrations](https://gitlab.com/prism7/archery/-/settings/integrations)
+There will be full interaction with the user.
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### Visual interaction:
 
-## Test and Deploy
+The installer follows a menu-driven, step-by-step principal, presenting you with a sane sequence of installation steps, aided by colored prompts, making the installation process easy, pleasant and intuitive.
 
-Use the built-in continuous integration in GitLab.
+For disk partitioning, "cgdisk" is used, as it offers a pseudo-gui (ncurses) interface, making the process of managing the partition table, setting GUIDs etc. easy and safe(r).
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
+### Input interaction:
 
-# Editing this README
+You will be asked to make your own choices, and there will always be a confirmation upon success or failure of the outcome of those choices.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+You will definitely know what your choice was, what has succeded and if anything went wrong.
 
-## Suggestions for a good README
+The installer has been purposely made in such a way that it will exit if unresolvable errors occur, so it ^should be^ impossible to end up with an errored installation or with parts unfinished.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+In several cases, it will try to remedy the situation by taking certain steps (e.g. unmounting a partition, in case it was already mounted from before) and bring you a few steps back, to re-run installation stages that might help you continue with success.
 
-## Name
-Choose a self-explaining name for your project.
+All stages are informative.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+- ## Portability:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The installer makes extended use of bash functions, so it can be easily modified to serve specific use-cases effortlessly, if so desired.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Where applicable, configuration takes place EXCLUSIVELY in the corresponding drop-in directories and never at the original '.conf' files, so the installed system preserves its functionality across updates and maintenance is minimized.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# Installer overview:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- ### First Check - Warning: [Auto]
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+A check/detection takes place, notifying you about the mode the installer runs on, along with the potential hazzard of running as root.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Normally should be runing as root, off the Arch-installation media.
+If that's not the case, you will be informed accordingly.
 
-## License
-For open source projects, say how it is licensed.
+If there is "terminus-font" detected (already included in the Arch installation media), you will be asked to use this font or its HiDPI version, while at console (tty), or you will be prompted to change tty and use console (if you're just simply test-running the installer in your own system with X or Wayland).
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+If not, setting different fonts is skipped.
+
+
+- ### Uefi Mode Verification: [Auto]
+
+Checks if the platform runs in uefi mode, and exits if not.
+
+
+- ### System Clock Update: [Auto]
+
+Self-explanatory.
+
+
+- ### Microcode Detection: [Auto]
+
+Cpu microcode detection takes place, ensuring the necessary "*-ucode" package will be installed later on.
+
+In case of "Intel" cpus, if "Custom KDE Plasma" is selected, "x86_energy_perf_policy" package will be installed and will be set to "performance" mode for obtaining maximum cpu performance during installation.
+
+
+
+## Main Menu:
+
+- [ ] [1] Personalization
+- [ ] [2] System Configuration
+- [ ] [3] Disk Management
+- [ ] [4] Start Installation
+
+
+### Personalization Submenu:
+
+- [ ] [1] Locale & Keyboard Layout Selection
+- [ ] [2] User, Root User & Hostname Setup
+- [ ] [ ] Return to Main Menu
+
+
+### System Configuration Submenu:
+
+- [ ] [1] Kernel & Bootloader Selection
+- [ ] [2] Filesystem & Swap Selection
+- [ ] [3] Graphics Setup
+- [ ] [4] Desktop Selection
+- [ ] [5] EFI Boot Entries Deletion
+- [ ] [6] Wireless Regulatory Domain Setup
+- [ ] [ ] Return to Main Menu
+
+
+### Disk Management Submenu:
+
+- [ ] [1] Disk GPT Manager
+- [ ] [2] Partition Manager
+- [ ] [3] Installation Disk & Encryption
+- [ ] [ ] Return to Main Menu
+
+-----------------------------------------------
+
+- ### Locale Selection: [Interactive - Skippable]
+
+Set your locale, choose from the locale list or use default.
+
+Skip for Default: en_US.UTF-8
+
+
+- ### Keyboard Layout Selection: [Interactive - Skippable]
+
+Set your keyboard layout, choose from the keyboard layout list or use default.
+
+Skip for Default: us
+
+
+- ### User Setup: [Interactive]
+
+Set username, password and verify.
+
+
+- ### Root User Setup: [Interactive]
+
+Set password and verify.
+
+
+- ### Hostname Setup: [Interactive]
+
+Self-explanatory.
+
+
+- ### Kernel Selection: [Interactive]
+
+Choose between Linux, Linux LTS, Linux Hardened & Linux Zen Kernels.
+
+
+- ### Bootloader Selection: [Interactive -Skippable]
+
+Choose between Systemd-boot, Grub or Custom.
+
+To use "Custom" option, you must edit the script beforehand.
+
+Skip if "Custom" is chosen.
+
+
+- ### Filesystem Selection: [Interactive]
+
+Choose Filesystem to be used (Ext4 / Btrfs)
+
+If "Btrfs" is chosen, you will be asked to label your "snapshots" directory.
+
+
+- ### Swap Selection: [Interactive - Skippable]
+
+Choose between Swap partition, Swapfile or none.
+
+If " Swapfile" is chosen, then set desired "Swapfile" size, and automatically create & activate the "Swapfile" and configure the "fstab" file accordingly.
+
+Skip if "none" is chosen.
+
+
+- ### Graphics Setup: [Interactive - Skippable]
+
+A check/detection takes place, notifying you about the underlying graphics subsystem.
+
+If Dual/Triple graphics setup is detected, a message will notify you to configure graphics after installation has finished.
+
+If Virtual Machine graphics are detected, the setup is skipped, and graphics configuration defaults to "n".
+
+If single graphics are detected, you will be offered the choice to automatically have drivers installed, hardware acceleration enabled and the graphics subsystem configured (mkinitcpio.conf, kernel parameters etc).
+
+Notice that only the latest available drivers will be installed, so should you choose "y" to auto-configure, ensure your graphics subsystem is currently supported.
+
+Xorg DXX drivers (xf86-xxxx-xxxx) for Intel - AMD - Nvidia will not be automatically installed.
+
+In case of AMD graphics, "amdgpu" driver support for "Southern Islands" and "Sea Islands" graphics is offered through auto-configuring.
+
+The purpose of this part of the installer is not to replace specialized or complicated/sofisticated software (like e.g. Manjaro's MHWDT or others) but only to offer support for a quick start.
+
+
+- ### Desktop Selection [Interactive]
+
+In this step, you will be presented with a list of setups to choose from:
+
+- [ ]  1. Plasma
+- [ ]  2. Optimized Plasma & Systemd-boot & Wayland
+- [ ]  3. Gnome
+- [ ]  4. Xfce
+- [ ]  5. Cinnamon
+- [ ]  6. Deepin
+- [ ]  7. Budgie
+- [ ]  8. Lxqt
+- [ ]  9. Mate
+- [ ] 10. Base System (No Desktop)
+- [ ] 11. Custom System  (Edit the installer script beforehand)
+---------------------------------------------------------------
+
+- All desktops (except "Optimized Plasma") are completely "Vanilla", and come with network support (networkmanager). For any additional functionality, please consult the Archwiki.
+
+- "Optimized Plasma" will install an optimized KDE Plasma version plus additional software, systemd-boot loader and Wayland.
+
+You'll find my preffered packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
+
+- "Base System" is literally a basic Arch linux system, consisting of the following packages: "base, base-devel, linux{lts-hardened-zen}, linux-firmware, *-ucode, nano, vim, networkmanager, wireless-regdb and e2fsprogs/btrfs-progs" (depending on the filesystem chosen).
+
+- "Custom System" is a Do-It-Yourself system, that can be created by editing the installer script beforehand.
+
+There are only 3 places in the whole script, to modify:
+
+- [ ] 1. A "custompkgs" variable, into which you can append the packages you desire to create your own system.
+
+- [ ] 2. A "cust_bootopts" variable, to set your kernel parameters to be passed upon boot.
+
+- [ ] 3. A "HERE document" that runs a set of commands within 'chroot' and creates the very basic Arch system, and to which you can append all of your desired configurations, according to your previous choices.
+
+It offers the minimal configuration required to make your system run.
+
+These 3 parts are easy to find, just by searching for the commented keyword "ATTENTION", which also includes a short description.
+
+
+- ### EFI Boot Entries Deletion: [Interactive - Skippable]
+
+Choose if you wish to delete any EFI boot entries or skip.
+
+
+- ### Wireless Regulatory Domain Setup: [Interactive - Skippable]
+
+Enter your 2-letter Country Code (e.g. 'US') to set the correct wifi regulations for your country.
+
+
+- ### Disk GPT Manager: [Interactive - Skippable]
+
+Use "gdisk" to perform various disk operations to any detected drive in your system (e.g. zapping the GPT and create a new one, etc.
+
+
+- ### Partition Manager: [Interactive - Skippable]
+
+Use "cgdisk" to perform various disk operations to any detected drive in your system.
+
+This is a key part of the installation, as it depends on YOU to correctly set the GUIDs in every relevant partition that is to be used in the installation disk.
+
+For convenience, a message will be printed on screen, showing you the corresponding GUID codes.
+
+Creation of an "EFI" System Partition and a "Root x86-64" Partition is mandatory.
+
+The partitions layout in this step should reflect your previous choices, e.g. if you chose to use a "Swap" partition, and it does not exist, now is the time to create it.
+
+If you need a seperate "Home" partition, create it now or an existing one can also be used.
+
+For the systemd "auto-gpt-generator" automation to work, all involved partitions MUST reside in the same physical disk/device.
+
+
+- ### Installation Disk Selection & Sanity Check: [Interactive]
+
+Select a disk to install Arch Linux on.
+
+Not to be confused with the "Disk Manager" step.
+
+This step only asks you to just point to the right disk for installation.
+
+Also, this step incorporates and performs a "Sanity Check" on the chosen disk.
+
+This means the installer will verify that the choices you've made so far, are correctly reflected on the partitions layout, before it lets you continue with the installation.
+
+The aim here is to make the installation process error-proof.
+
+It will ensure that an "EFI" System Partition indeed exists, that a "Root x86-64" partition exists, that a "Swap" partition exists IF you chose to use a "Swap" partition and will also detect an existing seperate "Home" partition.
+
+If the Sanity Check fails, the installer will send you back to the "Disk Manager" step, so you can correct any errors/omissions.
+
+
+- ### Encryption Setup: [Interactive - Skippable]
+
+Choose if you will enable LUKS encryption on your "Swap","Root x86-64" partition (and -if using "ext4" filesystem- on your separate "Home" partition, if exists).
+
+Also, you will be asked to Label your partition(s).
+
+Again, the scope here is not to create an inpenetrable system but a decently protected system.
+
+An unencrypted "EFI" System partition and a LUKS encrypted "Root"/"Home"/"Swap" partition should suffice.
+
+
+- ### Swap Partition Activation: [Auto]
+
+If you chose to create a "Swap" partition, now it will be activated.
+
+
+    ### If the answer to the "Disk Encryption" step was "no" :
+
+
+- ### Mode Selection: [Interactive]
+
+The installer asks the user to choose the preffered "Install" Mode.
+
+- [ ] "Auto" will perform Formatting, Labeling and Mounting of all of the involved partitions automatically, but it will ask for your confirmation before formatting a separate "ext4" "Home" partition (if found), in case it belongs to another Os and you would like to keep it intact.
+
+- [ ] "Manual" mode will perform the above by asking the user to choose which partitions to format, choose desired name to label the partitions, and mount them accordingly.
+
+The "Auto" mode will switch to "Manual" mode if errors are encountered (so the user gets control of the procedure), and when the said mini-step is completed (e.g formatting "EFI") it will continue in "Auto" mode for the rest of the partitions.
+
+Upon completion, both "Auto" and "Manual" mode present the user with a summary of the partitions and mounts layout, preparing for the next step.
+
+
+- ### Confirm Installation Status [Interactive]
+
+Choose if you will procceed with the installation.
+
+If you are satisfied with the result (presented to you in the previous step and still showing on screen), answer "yes".
+
+If your answer is "no", then the installer unmounts all mounted partitions and reloads "System Configuration" and all necessary installation stages, so you can revise your choices until you are satisfied with the outcome.
+
+
+- ### Optimize Pacman: [Interactive]
+
+Oftentimes, the mirrorlist created from Reflector's auto-run is not ideal.
+
+So, in this step you are being presented with the full list of countries that are hosting Archlinux mirrors, to choose one of your preference.
+
+If the field is left empty, the default Reflector's mirrorlist will be used.
+
+If a country from the list is chosen, Reflector will rate its mirrors, using [ --age 5 --threads $(nproc) -p https ].
+If no mirrors are found, it means that the country chosen doesn't fulfill Reflector's set criteria.
+Try with another country.
+
+Then you will be asked to enable Pacman's Parallel Downloads feature, and if the answer is "y" you will be asked to choose a number of parallel downloads, ranging from 2 up to 5 max.
+
+- ### Pacstrap System: [Auto]
+
+Your selected setup will be installed now.
+
+
+- ### Chroot & Configure System: [Auto]
+
+During this stage, the majority of configuration takes place.
+
+Detection of rotational or solid state drives has already taken place, so "fstrim.timer" will be activated accordingly for the installation drive.
+
+Also, if a non-rotational drive is being used during installation, and LUKS encryption has been chosen, then specific options will be applied to open the LUKS container.
+
+Graphics setup, encryption setup, swap/swapfile activation/offset calculation, specific filesystem-based options, interactive package pacstrapping, pciid database update, auto configuration of your timezone based on your computer's ip address, makepkg optimization, sysctl / mkinitcpio / udisks / systemd / crypttab / sudoers file configuration, systemd services activation etc. all happen here.
+
+As mentioned earlier, configuration takes place using only the respective drop-in directories and not the original '.conf' files, where applicable.
+
+"Optimized Plasma" option offers KDE Plasma with maximum system configuration and optimizations.
+
+All other setups offer only the minimal/typical configuration required to make your system run.
+
+
+    ### If the answer to the "Disk Encryption" step was "yes":
+
+
+- ### Secure Disk Erasure: [Interactive - Skippable]
+
+Since LUKS encryption has been chosen in a previous step, the installer offers the option to securely erase the involved drive before continuing with the installation, if so desired.
+
+
+- ### LUKS Encryption: [Interactive - Skippable]
+
+Your selected "Root x86-64" partition will be encrypted using LUKS.
+
+If a separate "Home" partition is detected, and the filesystem chosen is "ext4", then you will be offered the option to encrypt "Home" too.
+
+Should you choose "yes" to that option, then "crypttab" auto-configuration will take place, so an extra LUKS password won't be needed to unlock said volume.
+
+Should you choose "no", the installer will still ask for your confirmation before formatting the "Home" partition to "ext4", in case it belongs to another Os and you would like to keep it intact.
+
+This stage cannot offer automatic error-resolving by automatically taking actions such as re-running previous steps of the installation precedure, like [Auto] or [Manual] mode does, as after LUKS encryption has finished, partprobing and informing the kernel about further/new changes will require a system restart.
+
+As a result, if any errors occur at this stage, will eventually terminate the installation, and you will be required to reboot and re-run the installer.
+
+For the same reason, the installer cannot offer the choice of reloading previous phases, as it does in the "Confirm Installation Status" stage.
+
+From here onwards, all stages are the same as the Non-Encrypted Installation.
+
+-----------------------------------------------------------------------------
+
+
+That's pretty much it.
+
+Online research was very helpful in the creation of this installer, as a few ideas came from scripts of others.
+
+All instructions used, stem from the Arch wiki.
+
+Any feedback will be greatly appreciated.
+
+Have fun everyone!
+
