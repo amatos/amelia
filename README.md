@@ -194,6 +194,8 @@ Xorg DXX drivers (xf86-xxxx-xxxx) for Intel - AMD - Nvidia will not be automatic
 
 In case of AMD graphics, "amdgpu" driver support for "Southern Islands" and "Sea Islands" graphics is offered through auto-configuring.
 
+In case of Nvidia graphics, according to the gpu architecture, there's support for the newer 'nvidia-open' drivers and the 'Nvidia Hook' will also be automatically created.
+
 The purpose of this part of the installer is not to replace specialized or complicated/sofisticated software (like e.g. Manjaro's MHWDT or others) but only to offer support for a quick start.
 
 
@@ -331,13 +333,13 @@ If your answer is "no", then the installer unmounts all mounted partitions and r
 
 - ### Optimize Pacman: [Interactive]
 
-Oftentimes, the mirrorlist created from Reflector's auto-run is not ideal.
+Oftentimes, the mirrorlist created from Reflector's auto-run at start-up is not ideal.
 
 So, in this step you are being presented with the full list of countries that are hosting Archlinux mirrors, to choose one of your preference.
 
 If the field is left empty, the default Reflector's mirrorlist will be used.
 
-If a country from the list is chosen, Reflector will rate its mirrors, using [ --age 5 --threads $(nproc) -p https ].
+If a country from the list is chosen, Reflector will rate its mirrors, using [ l 10 -p https -f 10 ].
 If no mirrors are found, it means that the country chosen doesn't fulfill Reflector's set criteria.
 Try with another country.
 
@@ -356,7 +358,7 @@ Detection of rotational or solid state drives has already taken place, so "fstri
 
 Also, if a non-rotational drive is being used during installation, and LUKS encryption has been chosen, then specific options will be applied to open the LUKS container.
 
-Graphics setup, encryption setup, swap/swapfile activation/offset calculation, specific filesystem-based options, interactive package pacstrapping, pciid database update, auto configuration of your timezone based on your computer's ip address, makepkg optimization, sysctl / mkinitcpio / udisks / systemd / crypttab / sudoers file configuration, systemd services activation etc. all happen here.
+Graphics setup, encryption setup, swap/swapfile activation/offset calculation, specific filesystem-based options, interactive package pacstrapping, pciid database update, auto configuration of your timezone based on your computer's ip address, makepkg optimization, sysctl / mkinitcpio / udisks / systemd / sudoers file configuration, systemd services activation etc. all happen here.
 
 As mentioned earlier, configuration takes place using only the respective drop-in directories and not the original '.conf' files, where applicable.
 
