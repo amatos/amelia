@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Amelia Installer
-# Version: 2.6
+# Version: 2.7
 
 ###########################################################################################
 # ### COLOR FUNCTIONS ###
@@ -524,7 +524,7 @@ Enter your keyboard layout ${bwhite}(empty for 'us')${blue}: "
         ###  'us' Keyboard Layout has been selected
         "
     elif [[ "${SETKBD}" == "l" ]]; then
-        localectl list-keymaps
+        localectl list-keymaps | more
         return 1
 
     elif ! localectl list-keymaps | grep -Fxq "${SETKBD}"; then
@@ -1059,7 +1059,7 @@ ${purple}###${nc} Graphics Setup ${purple}###${nc}
     nvidiacards="$(lspci | grep -E 'VGA|Display|3D' | grep -E 'NVIDIA Corporation'| sed 's/.*Corporation //g' | cat --number | sed 's/.[0-9]//')"
     hypervisor="$(systemd-detect-virt)"
 
-    if [[ "${vgacount}" == "1" ]]; then
+     if [[ "${vgacount}" == "1" ]]; then
 
             if [[ "${intelcount}" -ge "1" ]]; then
                 vendor="Intel"
@@ -1098,9 +1098,7 @@ ${purple}###${nc} Graphics Setup ${purple}###${nc}
         "
         if [[ "${vendor}" == "Nvidia" ]]; then
         RED "
-        [!] The latest drivers will be installed.
-
-        [!] Apply only if your hardware is currently being supported "
+        [!] Supported architectures: NV110 (Maxwell) Graphics or newer "
         fi
 
 BLUE "
@@ -1150,15 +1148,108 @@ Enter a number ${bwhite}(empty to Skip)${blue}: "
 
             elif [[ "${vendor}" == "Nvidia" ]]; then
 
-                if [[ "${kernelnmbr}" == "1" ]]; then
-                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia nvidia-settings nvidia-utils opencl-nvidia"
-                elif [[ "${kernelnmbr}" == "2" ]]; then
-                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-lts nvidia-settings nvidia-utils opencl-nvidia"
-                else
-                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-dkms nvidia-settings nvidia-utils opencl-nvidia"
-                fi
-            fi
+                sleep 0.5
+                YELLOW "
+        >  Select Nvidia architecture: "
+                NC "
 
+            [1]  NV110 (Maxwell) Graphics or newer
+
+            [2]  NV160 (Turing) Graphics or newer "
+                BLUE "
+
+
+Enter a number: "
+                read -p "
+==> " family
+
+                    if [[ "${family}" == "1" ]]; then
+                        NC "
+
+==> [${green}Maxwell+ OK${nc}]
+                        "
+                    elif [[ "${family}" == "2" ]]; then
+                        sleep 0.5
+                        YELLOW "
+        >  Select Nvidia driver: "
+                        NC "
+
+            [1]  'Nvidia-Open' driver
+
+            [2]  'Nvidia' driver "
+                        BLUE "
+
+
+Enter a number: "
+                        read -p "
+==> " nvdriver
+
+                        if [[ "${nvdriver}" == "1" ]]; then
+                            NC "
+
+==> [${green}Turing+ OK${nc}]
+                            "
+                        elif [[ "${nvdriver}" == "2" ]]; then
+                            NC "
+
+==> [${green}Turing+ OK${nc}]
+                            "
+                        else
+                            NC
+                            invalid
+                            return 1
+                        fi
+                    else
+                        NC
+                        invalid
+                        return 1
+                    fi
+
+                        if [[ "${kernelnmbr}" == "1" ]]; then
+
+                            if [[ "${family}" == "1" ]]; then
+                                vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia nvidia-settings nvidia-utils opencl-nvidia"
+                                nvname="nvidia"
+
+                            elif [[ "${family}" == "2" ]]; then
+                                if [[ "${nvdriver}" == "1" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-open nvidia-settings nvidia-utils opencl-nvidia"
+                                    nvname="nvidia-open"
+                                elif [[ "${nvdriver}" == "2" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia nvidia-settings nvidia-utils opencl-nvidia"
+                                    nvname="nvidia"
+                                fi
+                            fi
+
+                        elif [[ "${kernelnmbr}" == "2" ]]; then
+
+                            if [[ "${family}" == "1" ]]; then
+                                vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-lts nvidia-settings nvidia-utils opencl-nvidia"
+                                nvname="nvidia-lts"
+
+                            elif [[ "${family}" == "2" ]]; then
+                                if [[ "${nvdriver}" == "1" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-open-dkms nvidia-settings nvidia-utils opencl-nvidia"
+                                elif [[ "${nvdriver}" == "2" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-lts nvidia-settings nvidia-utils opencl-nvidia"
+                                    nvname="nvidia-lts"
+                                fi
+                            fi
+
+                        else
+
+                            if [[ "${family}" == "1" ]]; then
+                                vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-dkms nvidia-settings nvidia-utils opencl-nvidia"
+
+                            elif [[ "${family}" == "2" ]]; then
+                                if [[ "${nvdriver}" == "1" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-open-dkms nvidia-settings nvidia-utils opencl-nvidia"
+                                elif [[ "${nvdriver}" == "2" ]]; then
+                                    vgapkgs="libva-nvidia-driver libvdpau-va-gl nvidia-dkms nvidia-settings nvidia-utils opencl-nvidia"
+                                fi
+                            fi
+                        fi
+            fi
             sleep 0.5
             YELLOW "
 
@@ -1288,6 +1379,7 @@ Enter a number: "
 
         sleep 0.5
         YELLOW "
+
 
         ###  ${desktopname} has been selected
         "
@@ -3125,6 +3217,8 @@ ${purple}###${nc} LUKS Encryption ${purple}###${nc}
 opt_pcmn (){
 
         prompt="PacMan"
+        countries="$(reflector --list-countries | sed 's|[0-9].*||' | sed 's|-.*||' | sed 's|Country.*||')"
+        list=(${countries})
         sleep 0.5
         NC "
 _______________________
@@ -3133,15 +3227,16 @@ ${purple}###${nc} Optimize PacMan ${purple}###${nc}
         "
         YELLOW "
 
-        >  Select a country for your Arch Mirrors: "
-        CYAN "
+        >  Select a country for your Arch Mirrors:
 
-Argentina  ${nc}Australia  ${cyan}Austria  ${nc}Azerbaijan  ${cyan}Bangladesh  ${nc}Belarus  ${cyan}Belgium  ${nc}Bosnia and Herzegovina  ${cyan}Brazil  ${nc}Bulgaria  ${cyan}Cambodia  ${nc}Canada  ${cyan}Chile  ${nc}China  ${cyan}Colombia  ${nc}Croatia  ${cyan}Czechia  ${nc}Denmark  ${cyan}Equador  ${nc}Estonia  ${cyan}Finland  ${nc}France  ${cyan}Georgia  ${nc}Germany  ${cyan}Greece  ${nc}Hong Kong  ${cyan}Hungary  ${nc}Iceland  ${cyan}India  ${nc}Indonesia  ${cyan}Iran  ${nc}Ireland  ${cyan}Israel  ${nc}Italy  ${cyan}Japan  ${nc}Kazakhstan  ${cyan}Kenya  ${nc}Latvia  ${cyan}Lithuania  ${nc}Luxembourg  ${cyan}Mauritius  ${nc}Mexico  ${cyan}Moldova  ${nc}Monaco  ${cyan}Netherlands  ${nc}New Caledonia  ${cyan}New Zealand  ${nc}North Macedonia  ${cyan}Norway  ${nc}Paraguay  ${cyan}Poland  ${nc}Portugal  ${cyan}Romania  ${nc}Russia  ${cyan}Reunion  ${nc}Serbia  ${cyan}Singapore  ${nc}Slovakia  ${cyan}Slovenia  ${nc}South Africa  ${cyan}South Korea  ${nc}Spain  ${cyan}Sweden  ${nc}Switzerland  ${cyan}Taiwan  ${nc}Thailand  ${cyan}Turkey  ${nc}Ukraine  ${cyan}United Kingdom  ${nc}United States  ${cyan}Uzbekistan  ${nc}Vietnam  ${purple}Worlwide"
-
+        "
+    for countries in "${list[*]}"; do
+        NC ${countries}
+    done
         BLUE "
 
 
-Enter country name ${bwhite}(Empty for Defaults)${blue}: "
+Enter country name or code ${bwhite}(Empty for Defaults)${blue}: "
         read -p "
 ==> " COUNTRY
         NC
@@ -3155,7 +3250,7 @@ Enter country name ${bwhite}(Empty for Defaults)${blue}: "
     elif [[ -n "${COUNTRY}" ]] ; then
         NC "
         "
-        if reflector --verbose -c "${COUNTRY}" --threads $(nproc) --age 5 -p https --sort rate --save /etc/pacman.d/mirrorlist; then
+        if reflector --verbose -c "${COUNTRY}" -l 10 -p https -f 10 --sort rate --save /etc/pacman.d/mirrorlist; then
             sleep 0.5
             NC "
 
@@ -3263,7 +3358,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         2)
         deskpkgs=""${basepkgs}" alsa-firmware alsa-utils arj ark bluedevil breeze-gtk ccache cups-pdf cups-pk-helper dolphin-plugins e2fsprogs efibootmgr elisa exfatprogs fdkaac ffmpegthumbs firefox git glibc-locales gst-libav gst-plugin-libcamera gst-plugin-msdk gst-plugin-opencv gst-plugin-pipewire gst-plugin-qmlgl gst-plugin-va gst-plugin-wpe gst-plugins-ugly gstreamer-vaapi htop icoutils ipp-usb kamera kamoso kate kcalc kde-gtk-config kdegraphics-mobipocket kdegraphics-thumbnailers kdenetwork-filesharing kdeplasma-addons kdesdk-kio kdesdk-thumbnailers kdialog keditbookmarks kget kimageformats5 kinit kio-admin kio-gdrive kio-zeroconf kompare konsole kscreen kvantum kwrited latte-dock libappimage libfido2 libktorrent libmms libnfs libva-utils lirc lrzip lua52-socket lzop mac man-db man-pages mesa-demos mesa-utils nano-syntax-highlighting nss-mdns ntfs-3g okular opus-tools p7zip packagekit-qt5 pacman-contrib partitionmanager pdfmixtool pigz pipewire-alsa pipewire-pulse pkgstats plasma-browser-integration plasma-desktop plasma-disks plasma-firewall plasma-nm plasma-pa plasma-wayland-protocols plasma-wayland-session power-profiles-daemon powerdevil powerline powerline-fonts print-manager python-pyqt5 python-reportlab qbittorrent qt5-feedback qt5-imageformats qt5-virtualkeyboard qt5-xmlpatterns realtime-privileges reflector rng-tools sddm-kcm skanlite sof-firmware soundkonverter sox spectacle sshfs system-config-printer terminus-font timidity++ ttf-ubuntu-font-family ufw-extras unarchiver unrar unzip usb_modeswitch usbutils vdpauinfo vlc vorbis-tools vorbisgain wget xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xsane zip zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting "${nrg_plc}"";;
         3)
-        deskpkgs=""${basepkgs}" gnome gnome-extra networkmanager"
+        deskpkgs=""${basepkgs}" gnome networkmanager"
         displaymanager="gdm"
         bluetooth="bluetooth"
         network="NetworkManager";;
@@ -3597,10 +3692,32 @@ GRUBBTRFSD
             fi
 
             if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
-                arch-chroot /mnt <<-NVIDIA
+                arch-chroot /mnt <<-NVIDIAGRUB
                 sed -i "/^#GRUB_TERMINAL_OUTPUT=console/s/^#//" /etc/default/grub &&
                 grub-mkconfig -o /boot/grub/grub.cfg
-NVIDIA
+NVIDIAGRUB
+
+            fi
+        fi
+
+        if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
+            if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
+                arch-chroot /mnt <<-NVIDIAHOOK
+                echo "[Trigger]
+                Operation=Install
+                Operation=Upgrade
+                Operation=Remove
+                Type=Package
+                Target=${nvname}
+                Target=${kernel}
+
+                [Action]
+                Description=Update NVIDIA module in initcpio
+                Depends=mkinitcpio
+                When=PostTransaction
+                NeedsTargets
+                Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P' " | tee /etc/pacman.d/hooks/nvidia.hook
+NVIDIAHOOK
             fi
         fi
 
@@ -3755,6 +3872,27 @@ NRG
         systemctl enable avahi-daemon bluetooth cups ipp-usb NetworkManager rngd sddm systemd-boot-update ufw ${trim}
 OPTIMIZED
 
+        if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
+            if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
+                arch-chroot /mnt <<-NVIDIAHOOK
+                echo "[Trigger]
+                Operation=Install
+                Operation=Upgrade
+                Operation=Remove
+                Type=Package
+                Target=${nvname}
+                Target=${kernel}
+
+                [Action]
+                Description=Update NVIDIA module in initcpio
+                Depends=mkinitcpio
+                When=PostTransaction
+                NeedsTargets
+                Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P' " | tee /etc/pacman.d/hooks/nvidia.hook
+NVIDIAHOOK
+            fi
+        fi
+
         if [[ "$?" -eq 0 ]]; then
             NC "
 
@@ -3823,10 +3961,31 @@ GRUBBTRFSD
             fi
 
             if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
-                arch-chroot /mnt <<-NVIDIA
+                arch-chroot /mnt <<-NVIDIAGRUB
                 sed -i "/^#GRUB_TERMINAL_OUTPUT=console/s/^#//" /etc/default/grub &&
                 grub-mkconfig -o /boot/grub/grub.cfg
-NVIDIA
+NVIDIAGRUB
+            fi
+        fi
+
+        if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
+            if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
+                arch-chroot /mnt <<-NVIDIAHOOK
+                echo "[Trigger]
+                Operation=Install
+                Operation=Upgrade
+                Operation=Remove
+                Type=Package
+                Target=${nvname}
+                Target=${kernel}
+
+                [Action]
+                Description=Update NVIDIA module in initcpio
+                Depends=mkinitcpio
+                When=PostTransaction
+                NeedsTargets
+                Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P' " | tee /etc/pacman.d/hooks/nvidia.hook
+NVIDIAHOOK
             fi
         fi
 
