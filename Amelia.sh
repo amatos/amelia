@@ -3231,7 +3231,7 @@ ${purple}###${nc} Optimize PacMan ${purple}###${nc}
 
         "
     for countries in "${list[*]}"; do
-        NC ${countries}
+        echo ${countries}
     done
         BLUE "
 
