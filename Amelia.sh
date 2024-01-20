@@ -3351,7 +3351,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
 
     case "${packages}" in
         1)
-        deskpkgs=""${basepkgs}" plasma"
+        deskpkgs=""${basepkgs}" plasma konsole"
         displaymanager="sddm"
         bluetooth="bluetooth"
         network="NetworkManager";;
@@ -3363,7 +3363,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         bluetooth="bluetooth"
         network="NetworkManager";;
         4)
-        deskpkgs=""${basepkgs}" xfce4 xfce4-goodies lightdm-slick-greeter network-manager-applet"
+        deskpkgs=""${basepkgs}" xfce4 lightdm-slick-greeter network-manager-applet"
         displaymanager="lightdm"
         network="NetworkManager";;
         5)
@@ -3372,11 +3372,11 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         bluetooth="bluetooth"
         network="NetworkManager";;
         6)
-        deskpkgs=""${basepkgs}" deepin deepin-extra deepin-kwin networkmanager"
+        deskpkgs=""${basepkgs}" deepin deepin-terminal deepin-kwin networkmanager"
         displaymanager="lightdm"
         network="NetworkManager";;
         7)
-        deskpkgs=""${basepkgs}" budgie budgie-desktop-view budgie-backgrounds gdm network-manager-applet materia-gtk-theme papirus-icon-theme"
+        deskpkgs=""${basepkgs}" budgie gdm network-manager-applet materia-gtk-theme papirus-icon-theme"
         displaymanager="gdm"
         network="NetworkManager";;
         8)
@@ -3384,7 +3384,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         displaymanager="sddm"
         network="NetworkManager";;
         9)
-        deskpkgs=""${basepkgs}" mate mate-extra mate-media blueman network-manager-applet mate-power-manager system-config-printer lightdm-slick-greeter"
+        deskpkgs=""${basepkgs}" mate mate-terminal mate-media blueman network-manager-applet mate-power-manager system-config-printer lightdm-slick-greeter"
         displaymanager="lightdm"
         bluetooth="bluetooth"
         network="NetworkManager";;
