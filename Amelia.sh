@@ -1358,9 +1358,23 @@ Enter a number: "
         2)  desktopname="'Optimized Plasma'";;
         3)  desktopname="'Gnome'";;
         4)  desktopname="'Xfce'";;
-        5)  desktopname="'Cinnamon'";;
+        5)  desktopname="'Cinnamon'"
+        sleep 0.5
+        YELLOW "
+
+
+        ### NOTE: Cinnamon comes with no native Terminal application by design
+
+        >  After installation is over, change TTY and use linux console (for shell access) to install your preferred one ";;
         6)  desktopname="'Deepin'";;
-        7)  desktopname="'Budgie'";;
+        7)  desktopname="'Budgie'"
+        sleep 0.5
+        YELLOW "
+
+
+        ### NOTE: Budgie comes with no native Terminal application by design
+
+        >  After installation is over, change TTY and use linux console (for shell access) to install your preferred one ";;
         8)  desktopname="'Lxqt'";;
         9)  desktopname="'Mate'";;
        10)  desktopname="'Base System'";;
