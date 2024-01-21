@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Amelia Installer
-# Version: 2.7
+# Version: 2.8
 
 ###########################################################################################
 # ### COLOR FUNCTIONS ###
@@ -1363,18 +1363,52 @@ Enter a number: "
         YELLOW "
 
 
-        ### NOTE: Cinnamon comes with no native Terminal application by design
+        ### NOTE: Cinnamon desktop lacks a native Terminal emulator by design
 
-        >  After installation is over, change TTY and use linux console (for shell access) to install your preferred one ";;
+        ### You can use linux console (ctrl+alt+F3) for shell access
+
+
+        >  Install 'gnome-terminal' for convenience ? [y/n] "
+        BLUE "
+
+
+Enter [y/n]: "
+        read -p "
+==> " console
+
+    if [[ "${console}" == "y" ]]; then
+        terminal="gnome-terminal"
+        sleep 0.5
+        NC "
+
+==> [${green}Terminal OK${nc}] "
+    fi ;;
         6)  desktopname="'Deepin'";;
         7)  desktopname="'Budgie'"
         sleep 0.5
         YELLOW "
 
 
-        ### NOTE: Budgie comes with no native Terminal application by design
+        ### NOTE: Budgie desktop lacks a native Terminal emulator by design
 
-        >  After installation is over, change TTY and use linux console (for shell access) to install your preferred one ";;
+        ### You can use linux console (ctrl+alt+F3) for shell access
+
+
+        >  Install 'gnome-terminal' for convenience ? [y/n] "
+        BLUE "
+
+
+Enter [y/n]: "
+        read -p "
+==> " console
+
+    if [[ "${console}" == "y" ]]; then
+        terminal="gnome-terminal"
+        sleep 0.5
+        NC "
+
+==> [${green}Terminal OK${nc}] "
+    fi ;;
         8)  desktopname="'Lxqt'";;
         9)  desktopname="'Mate'";;
        10)  desktopname="'Base System'";;
@@ -3381,7 +3415,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         displaymanager="lightdm"
         network="NetworkManager";;
         5)
-        deskpkgs=""${basepkgs}" cinnamon blueberry lightdm-slick-greeter system-config-printer gnome-keyring"
+        deskpkgs=""${basepkgs}" cinnamon blueberry lightdm-slick-greeter system-config-printer gnome-keyring ${terminal}"
         displaymanager="lightdm"
         bluetooth="bluetooth"
         network="NetworkManager";;
@@ -3390,8 +3424,8 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         displaymanager="lightdm"
         network="NetworkManager";;
         7)
-        deskpkgs=""${basepkgs}" budgie gdm network-manager-applet materia-gtk-theme papirus-icon-theme"
-        displaymanager="gdm"
+        deskpkgs=""${basepkgs}" budgie lightdm-gtk-greeter arc-gtk-theme papirus-icon-theme network-manager-applet ${terminal}"
+        displaymanager="lightdm"
         network="NetworkManager";;
         8)
         deskpkgs=""${basepkgs}" lxqt breeze-icons network-manager-applet sddm xscreensaver"
@@ -3670,6 +3704,10 @@ SYSTEM
                 arch-chroot /mnt <<-DEEPIN
                 sed -i 's|^#greeter-session=example-gtk-gnome|greeter-session=lightdm-deepin-greeter|g' /etc/lightdm/lightdm.conf
 DEEPIN
+            elif [[ "${packages}" == "7" ]]; then
+                arch-chroot /mnt <<-BUDGIE
+                sed -i 's|^#greeter-session=example-gtk-gnome|greeter-session=lightdm-gtk-greeter|g' /etc/lightdm/lightdm.conf
+BUDGIE
             else
                 arch-chroot /mnt <<-LIGHTDM
                 sed -i 's|^#greeter-session=example-gtk-gnome|greeter-session=lightdm-slick-greeter|g' /etc/lightdm/lightdm.conf
