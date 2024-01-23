@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Amelia Installer
-# Version: 2.8
+# Version: 3.0
 
 ###########################################################################################
 # ### COLOR FUNCTIONS ###
@@ -823,9 +823,7 @@ ${purple}###${nc} Bootloader Selection ${purple}###${nc}
 
             [1]  Systemd-boot
 
-            [2]  Grub
-
-            [3]  Other    ${cyan}[!] Edit the installer script beforehand [!]${nc} "
+            [2]  Grub "
         BLUE "
 
 
@@ -846,13 +844,6 @@ Enter a number: "
 
         ###  'Grub' has been selected
         ";;
-        3)
-        sleep 0.5
-        YELLOW "
-
-        ###  Custom choice:    ${red}[!] Edit the installer script beforehand [!]${nc}
-        "
-        skip;;
         "")
         sleep 0.5
         RED "
@@ -1345,7 +1336,7 @@ ${purple}###${nc} Desktop Selection ${purple}###${nc}
 
            [10]  Base System (No Desktop)
 
-           [11]  Custom System    ${cyan}[!] Edit the installer script beforehand [!]${nc} "
+           [11]  Custom System  ${red}[!] EXPERTS ONLY [!]"
         BLUE "
 
 
@@ -1412,7 +1403,9 @@ Enter [y/n]: "
         8)  desktopname="'Lxqt'";;
         9)  desktopname="'Mate'";;
        10)  desktopname="'Base System'";;
-       11)  desktopname="'Custom System'";;
+       11)  desktopname="'Custom System'"
+        until cust_sys; do :; done
+        return 0;;
        "")
         sleep 0.5
         RED "
@@ -1431,6 +1424,143 @@ Enter [y/n]: "
 
         ###  ${desktopname} has been selected
         "
+
+        sleep 0.5
+        YELLOW "
+
+        ### NOTE: 'base' package group does not include the tools needed for building packages
+
+
+        >  Install 'base-devel' package group ? [y/n] "
+        BLUE "
+
+
+Enter [y/n]: "
+        read -p "
+==> " dev
+
+    if [[ "${dev}" == "y" ]]; then
+        devel="base-devel"
+        sleep 0.5
+        NC "
+
+==> [${green}base-devel OK${nc}] "
+    fi
+
+        ok
+}
+###########################################################################################
+cust_sys (){
+
+        sleep 0.5
+        NC "
+___________________________
+
+${purple}###${nc} Custom System Setup ${purple}###${nc}
+        "
+        YELLOW "
+
+        >  Create your own system: "
+        NC "
+
+            [1]  Add Packages to be Installed
+
+            [2]  Add Services to be Enabled
+
+            [3]  Add Kernel Parameters to be Set at boot time
+
+            [ ]  Done "
+        BLUE "
+
+
+Enter a number: "
+        read -p "
+==> " customsys
+
+    case "${customsys}" in
+        1)
+        until add_pkgs; do : ; done
+        return 1 ;;
+        2)
+        until add_services; do : ; done
+        return 1 ;;
+        3)
+        until add_prmtrs; do : ; done
+        return 1 ;;
+        "")
+        if [[ "${quick_install}" == "1" ]]; then
+            if [[ -z "${custompkgs}" || -z "${customservices}" ]]; then
+                until slct_dsktp; do : ; done
+            else
+                until instl; do : ; done
+            fi
+        else
+            if [[ -z "${custompkgs}" || -z "${customservices}" ]]; then
+                until slct_dsktp; do : ; done
+            else
+                until sys_submn; do : ; done
+            fi
+        fi ;;
+        *)
+        invalid
+        return 1 ;;
+    esac
+}
+###########################################################################################
+add_pkgs (){
+
+        prompt="Custom Packages"
+        sleep 0.5
+        NC "
+_____________________________
+
+${purple}###${nc} Custom Packages Setup ${purple}###${nc}
+        "
+        BLUE "
+
+
+Enter your packages ${bwhite}(space-seperated)${blue}: "
+        read -p "
+==> " custompkgs
+
+        ok
+}
+###########################################################################################
+add_services (){
+
+        prompt="Custom Services"
+        sleep 0.5
+        NC "
+_____________________________
+
+${purple}###${nc} Custom Services Setup ${purple}###${nc}
+        "
+        BLUE "
+
+
+Enter your services ${bwhite}(space-seperated)${blue}: "
+        read -p "
+==> " customservices
+
+        ok
+}
+###########################################################################################
+add_prmtrs (){
+
+        prompt="Custom Kernel Parameters"
+        sleep 0.5
+        NC "
+______________________________________
+
+${purple}###${nc} Custom Kernel Parameters Setup ${purple}###${nc}
+        "
+        BLUE "
+
+
+Enter your Kernel parameters ${bwhite}(space-seperated)${blue}: "
+        read -p "
+==> " cust_bootopts
+
         ok
 }
 ###########################################################################################
@@ -2152,36 +2282,41 @@ instl (){
         RED "
 
 
-
         [!] Please complete 'Installation Disk' & 'Encryption' to continue
 
         "
         until instl_dsk; do : ; done
         until ask_crypt; do : ; done
     fi
+
 #------------------------------------------------------------------------------------------
-    if [[ "${swapmode}" == "1" ]]; then
-        until "${swaptype}"; do : ; done
-    fi
 
-    if [[ "${encrypt}" == "no" ]]; then
-        until set_mode; do : ; done
-        until confirm_status; do : ; done
+    if [[ -z "${completion}" ]]; then
 
-    elif [[ "${encrypt}" == "yes" ]]; then
-        until sec_erase; do : ; done
-        until luks; do : ; done
-        until opt_pcmn; do : ; done
-        until pacstrap_system; do : ; done
+        if [[ "${swapmode}" == "1" ]]; then
+            until "${swaptype}"; do : ; done
+        fi
+
+        if [[ "${encrypt}" == "no" ]]; then
+            until set_mode; do : ; done
+            until confirm_status; do : ; done
+
+        elif [[ "${encrypt}" == "yes" ]]; then
+            until sec_erase; do : ; done
+            until luks; do : ; done
+            until opt_pcmn; do : ; done
+            until pacstrap_system; do : ; done
 
             if [[ "${swapmode}" == "2" ]]; then
                 until "${swaptype}"; do : ; done
             fi
+
             if [[ -n "${REGDOM}" ]]; then
                 until wireless_regdom; do : ; done
             fi
 
-        until chroot_conf; do : ; done
+            until chroot_conf; do : ; done
+        fi
     fi
 }
 ###########################################################################################
@@ -3392,9 +3527,11 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
     fi
 
     if [[ "${vendor}" == "Virtual Machine" ]]; then
-        basepkgs="base base-devel "${kernel}" "${kernel}"-headers nano vim "${microcode}" "${fstools}" "${bootldr_pkgs}""
+        basepkgs="base sudo "${kernel}" nano vim "${microcode}" "${fstools}" "${bootldr_pkgs}" "${devel}""
+    elif [[ "${vendor}" == "Nvidia" ]]; then
+        basepkgs="base sudo "${kernel}" "${kernel}"-headers linux-firmware nano vim "${microcode}" "${wireless_reg}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${devel}""
     else
-        basepkgs="base base-devel "${kernel}" "${kernel}"-headers linux-firmware nano vim "${microcode}" "${wireless_reg}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}""
+        basepkgs="base sudo "${kernel}" linux-firmware nano vim "${microcode}" "${wireless_reg}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${devel}""
     fi
 
     case "${packages}" in
@@ -3441,15 +3578,12 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
         network="NetworkManager";;
 #------------------------------------------------------------------------------------------
         11)
-# ### ATTENTION ### : Append your desired packages to the "custompkgs" variable below, seperated by a space: ###
 
-        custompkgs=""
-
-        deskpkgs="base "${kernel}" "${microcode}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${wireless_reg}" "${custompkgs}"";;
+        deskpkgs="base sudo "${kernel}" "${microcode}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${wireless_reg}" "${custompkgs}"";;
 #------------------------------------------------------------------------------------------
     esac
 
-    if pacstrap -K -i /mnt archlinux-keyring ${deskpkgs}; then
+    if pacstrap -K -i /mnt ${deskpkgs}; then
         if [[ "${fs}" == "2"  ]]; then
             genfstab -t PARTUUID /mnt >> /mnt/etc/fstab
         fi
@@ -3557,11 +3691,6 @@ _________________________________
 
 ${purple}###${nc} Chroot & Configure System ${purple}###${nc}
         "
-# ### ATTENTION ### : Enter your desired kernel parameters in the "cust_bootopts" variable below: ###
-
-        cust_bootopts=""
-
-#------------------------------------------------------------------------------------------
 
     if [[ "${kernelnmbr}" == "3" ]]; then
         swapmode="3"
@@ -3694,7 +3823,6 @@ ${purple}###${nc} Chroot & Configure System ${purple}###${nc}
         useradd -m -G wheel -s /bin/bash ${USERNAME} &&
         echo ${USERNAME}:${USERPASSWD2} | chpasswd &&
         echo "
-        Defaults editor=/usr/bin/nano
         %wheel ALL=(ALL) ALL" | tee /etc/sudoers.d/sudoedits &&
         visudo -c /etc/sudoers.d/sudoedits
 SYSTEM
@@ -3785,6 +3913,7 @@ NVIDIAHOOK
             err_instl_abort
         fi
     fi
+
 #------------------------------------------------------------------------------------------
 
     if [[ "${packages}" == "2" ]]; then
@@ -3956,9 +4085,8 @@ NVIDIAHOOK
             err_instl_abort
         fi
     fi
-#------------------------------------------------------------------------------------------
 
-# ### ATTENTION ### : If 'Custom Setup' was selected, append your extra configurations to the "HERE document" below:
+#------------------------------------------------------------------------------------------
 
     if [[ "${packages}" == "11" ]]; then
         arch-chroot /mnt <<-CUSTOM
@@ -3995,7 +4123,7 @@ CUSTOM
             initrd /${microcode}.img
             initrd /initramfs-${kernel}.img
             options rw ${boot_opts}" | tee /boot/loader/entries/arch.conf &&
-            systemctl enable systemd-boot-update
+            systemctl enable systemd-boot-update ${customservices} ${trim}
 BOOTCTL
         elif [[ "${bootloader}" == "2" ]]; then
             arch-chroot /mnt <<-GRUB
@@ -4008,7 +4136,7 @@ BOOTCTL
 GRUB
             if [[ "${bootloader}" == "2" && "${fs}" == "2" ]]; then
                 arch-chroot /mnt <<-GRUBBTRFSD
-                systemctl enable grub-btrfsd
+                systemctl enable grub-btrfsd ${customservices} ${trim}
 GRUBBTRFSD
             fi
 
@@ -4052,6 +4180,8 @@ NVIDIAHOOK
             err_instl_abort
         fi
     fi
+
+    completion="yes"
 }
 
 # ### END FUNCTIONS ###
