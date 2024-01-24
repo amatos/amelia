@@ -1,7 +1,7 @@
 # 'Amelia' is an Arch Linux installer, written in Bash.
 
 -----------------------------------------------------
-The main concept behind this installer is the trinity: Automation and Interaction.
+The main concept behind this installer is: Automation and Interaction.
 
 'Amelia' is mainly targeted towards the average user, but power users might find it useful too.
 
