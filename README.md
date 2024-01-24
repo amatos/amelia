@@ -47,7 +47,7 @@ All stages are informative.
 
 The installer makes extended use of bash functions, so it can be easily modified to serve specific use-cases effortlessly, if so desired.
 
-Where applicable, configuration takes place EXCLUSIVELY in the corresponding drop-in directories and never at the original '.conf' files, so the installed system preserves its functionality across updates and maintenance is minimized.
+Where applicable, configuration takes place EXCLUSIVELY in the corresponding drop-in directories and never at the original ".conf" files, so the installed system preserves its functionality across updates and maintenance is minimized.
 
 
 
@@ -80,7 +80,7 @@ Self-explanatory.
 
 Cpu microcode detection takes place, ensuring the necessary "*-ucode" package will be installed later on.
 
-In case of "Intel" cpus, if "Custom KDE Plasma" is selected, "x86_energy_perf_policy" package will be installed and will be set to "performance" mode for obtaining maximum cpu performance during installation.
+In case of "Intel" cpus, if "Optimized Plasma" is selected, "x86_energy_perf_policy" package will be installed and will be set to "performance" mode for obtaining maximum cpu performance during installation.
 
 
 
@@ -155,11 +155,8 @@ Choose between Linux, Linux LTS, Linux Hardened & Linux Zen Kernels.
 
 - ### Bootloader Selection: [Interactive -Skippable]
 
-Choose between Systemd-boot, Grub or Custom.
+Choose between Systemd-boot or Grub
 
-To use "Custom" option, you must edit the script beforehand.
-
-Skip if "Custom" is chosen.
 
 
 - ### Filesystem Selection: [Interactive]
@@ -213,7 +210,7 @@ In this step, you will be presented with a list of setups to choose from:
 - [ ]  8. Lxqt
 - [ ]  9. Mate
 - [ ] 10. Base System (No Desktop)
-- [ ] 11. Custom System  (Edit the installer script beforehand)
+- [ ] 11. Custom System
 ---------------------------------------------------------------
 
 - All desktops (except "Optimized Plasma") are completely "Vanilla", and come with network support (networkmanager). For any additional functionality, please consult the Archwiki.
@@ -222,21 +219,11 @@ In this step, you will be presented with a list of setups to choose from:
 
 You'll find my preffered packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
 
-- "Base System" is literally a basic Arch linux system, consisting of the following packages: "base, base-devel, linux{lts-hardened-zen}, linux-firmware, *-ucode, nano, vim, networkmanager, wireless-regdb and e2fsprogs/btrfs-progs" (depending on the filesystem chosen).
+- "Base System" is literally a basic Arch linux system, consisting of the following packages: "base, linux{lts-hardened-zen}, linux-firmware, *-ucode, nano, vim, networkmanager, wireless-regdb and e2fsprogs/btrfs-progs" (depending on the filesystem chosen).
 
-- "Custom System" is a Do-It-Yourself system, that can be created by editing the installer script beforehand.
+- "Custom System" is a Do-It-Yourself system, that can be created by adding your own packages  in the relative Menus, on-the-fly.
 
-There are only 3 places in the whole script, to modify:
-
-- [ ] 1. A "custompkgs" variable, into which you can append the packages you desire to create your own system.
-
-- [ ] 2. A "cust_bootopts" variable, to set your kernel parameters to be passed upon boot.
-
-- [ ] 3. A "HERE document" that runs a set of commands within 'chroot' and creates the very basic Arch system, and to which you can append all of your desired configurations, according to your previous choices.
-
-It offers the minimal configuration required to make your system run.
-
-These 3 parts are easy to find, just by searching for the commented keyword "ATTENTION", which also includes a short description.
+It offers just the minimal configuration required to make your system run.
 
 
 - ### EFI Boot Entries Deletion: [Interactive - Skippable]
@@ -335,7 +322,7 @@ If your answer is "no", then the installer unmounts all mounted partitions and r
 
 Oftentimes, the mirrorlist created from Reflector's auto-run at start-up is not ideal.
 
-So, in this step you are being presented with the full list of countries that are hosting Archlinux mirrors, to choose one of your preference.
+So, in this step you are being presented with the current full list of countries that are hosting Archlinux mirrors, to choose one of your preference.
 
 If the field is left empty, the default Reflector's mirrorlist will be used.
 
@@ -381,7 +368,7 @@ Your selected "Root x86-64" partition will be encrypted using LUKS.
 
 If a separate "Home" partition is detected, and the filesystem chosen is "ext4", then you will be offered the option to encrypt "Home" too.
 
-Should you choose "yes" to that option, then "crypttab" auto-configuration will take place, so an extra LUKS password won't be needed to unlock said volume.
+Should you choose "yes" to that option, then auto-configuration will take place, so an extra LUKS password won't be needed to unlock said volume.
 
 Should you choose "no", the installer will still ask for your confirmation before formatting the "Home" partition to "ext4", in case it belongs to another Os and you would like to keep it intact.
 
