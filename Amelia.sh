@@ -1502,12 +1502,12 @@ Enter [y/n]: "
         invalid
         return 1;;
     esac
-
         ok
 }
 ###########################################################################################
 cust_sys (){
 
+        prompt="Custom System"
         sleep 0.5
         NC "
 ___________________________
@@ -1545,15 +1545,17 @@ Enter a number: "
         return 1 ;;
         "")
         if [[ "${quick_install}" == "1" ]]; then
-            if [[ -z "${custompkgs}" || -z "${customservices}" ]]; then
+            if [[ -z "${custompkgs}" ]]; then
                 until slct_dsktp; do : ; done
             else
+                ok
                 until instl; do : ; done
             fi
         else
-            if [[ -z "${custompkgs}" || -z "${customservices}" ]]; then
+            if [[ -z "${custompkgs}" ]]; then
                 until slct_dsktp; do : ; done
             else
+                ok
                 until sys_submn; do : ; done
             fi
         fi ;;
