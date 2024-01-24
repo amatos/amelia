@@ -213,11 +213,20 @@ In this step, you will be presented with a list of setups to choose from:
 
 - "Optimized Plasma" will install an optimized KDE Plasma version plus additional software, systemd-boot loader and Wayland.
 
-You'll find my prefered packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
+You'll find my preferred packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
 
 - "Base System" is literally a basic Arch linux system, consisting of the following packages: "base, linux{lts-hardened-zen}, linux-firmware, *-ucode, nano, vim, networkmanager, wireless-regdb and e2fsprogs/btrfs-progs" (depending on the filesystem chosen).
 
-- "Custom System" is a Do-It-Yourself system, that can be created by adding your own packages  in the relative Menus, on-the-fly.
+- "Custom System": In this step, you can create your own system, on-the-fly, using the following Menus:
+
+
+- ### Custom System Setup [Interactive]
+
+- [ ]  1. Add Packages to be Installed
+- [ ]  2. Add Services to be Enabled
+- [ ]  3. Add Kernel Parameters to be Set at boot time
+- [ ]  4. Done
+---------------------------------------------------------------
 
 It offers just the minimal configuration required to make your system run.
 
