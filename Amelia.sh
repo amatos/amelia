@@ -1367,13 +1367,32 @@ Enter [y/n]: "
         read -p "
 ==> " console
 
-    if [[ "${console}" == "y" ]]; then
-        terminal="gnome-terminal"
-        sleep 0.5
-        NC "
+        case "${console}" in
+            y)
+            terminal="gnome-terminal"
+            sleep 0.5
+            NC "
 
-==> [${green}Terminal OK${nc}] "
-    fi ;;
+==> [${green}Terminal OK${nc}] ";;
+            n)
+            NC
+            skip
+            sleep 0.5
+            NC "
+
+==> [${green}Terminal OK${nc}] ";;
+            "")
+            sleep 0.5
+            NC
+            RED "
+            [!] Please make a selection.. "
+            reload
+            return 1 ;;
+            *)
+            invalid
+            return 1 ;;
+        esac ;;
+
         6)  desktopname="'Deepin'";;
         7)  desktopname="'Budgie'"
         sleep 0.5
@@ -1393,13 +1412,32 @@ Enter [y/n]: "
         read -p "
 ==> " console
 
-    if [[ "${console}" == "y" ]]; then
-        terminal="gnome-terminal"
-        sleep 0.5
-        NC "
+        case "${console}" in
+            y)
+            terminal="gnome-terminal"
+            sleep 0.5
+            NC "
 
-==> [${green}Terminal OK${nc}] "
-    fi ;;
+==> [${green}Terminal OK${nc}] ";;
+            n)
+            NC
+            skip
+            sleep 0.5
+            NC "
+
+==> [${green}Terminal OK${nc}] ";;
+            "")
+            sleep 0.5
+            NC
+            RED "
+            [!] Please make a selection.. "
+            reload
+            return 1 ;;
+            *)
+            invalid
+            return 1 ;;
+        esac ;;
+
         8)  desktopname="'Lxqt'";;
         9)  desktopname="'Mate'";;
        10)  desktopname="'Base System'";;
@@ -1439,13 +1477,31 @@ Enter [y/n]: "
         read -p "
 ==> " dev
 
-    if [[ "${dev}" == "y" ]]; then
+    case "${dev}" in
+        y)
         devel="base-devel"
         sleep 0.5
         NC "
 
-==> [${green}base-devel OK${nc}] "
-    fi
+==> [${green}base-devel OK${nc}] ";;
+        n)
+        NC
+        skip
+        sleep 0.5
+        NC "
+
+==> [${green}base-devel OK${nc}] ";;
+        "")
+        sleep 0.5
+        NC
+        RED "
+        [!] Please type 'y' or 'n' to continue "
+        reload
+        return 1;;
+        *)
+        invalid
+        return 1;;
+    esac
 
         ok
 }
