@@ -1,7 +1,7 @@
 # 'Amelia' is an Arch Linux installer, written in Bash.
 
 -----------------------------------------------------
-The main concept behind this installer is the trinity: Automation, Interaction and Portability.
+The main concept behind this installer is the trinity: Automation and Interaction.
 
 'Amelia' is mainly targeted towards the average user, but power users might find it useful too.
 
@@ -42,10 +42,6 @@ In several cases, it will try to remedy the situation by taking certain steps (e
 
 All stages are informative.
 
-
-- ## Portability:
-
-The installer makes extended use of bash functions, so it can be easily modified to serve specific use-cases effortlessly, if so desired.
 
 Where applicable, configuration takes place EXCLUSIVELY in the corresponding drop-in directories and never at the original ".conf" files, so the installed system preserves its functionality across updates and maintenance is minimized.
 
@@ -217,7 +213,7 @@ In this step, you will be presented with a list of setups to choose from:
 
 - "Optimized Plasma" will install an optimized KDE Plasma version plus additional software, systemd-boot loader and Wayland.
 
-You'll find my preffered packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
+You'll find my prefered packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
 
 - "Base System" is literally a basic Arch linux system, consisting of the following packages: "base, linux{lts-hardened-zen}, linux-firmware, *-ucode, nano, vim, networkmanager, wireless-regdb and e2fsprogs/btrfs-progs" (depending on the filesystem chosen).
 
