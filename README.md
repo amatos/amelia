@@ -303,7 +303,7 @@ If you chose to create a "Swap" partition, now it will be activated.
 
 - ### Mode Selection: [Interactive]
 
-The installer asks the user to choose the preffered "Install" Mode.
+The installer asks the user to choose the preferred "Install" Mode.
 
 - [ ] "Auto" will perform Formatting, Labeling and Mounting of all of the involved partitions automatically, but it will ask for your confirmation before formatting a separate "ext4" "Home" partition (if found), in case it belongs to another Os and you would like to keep it intact.
 
@@ -316,7 +316,7 @@ Upon completion, both "Auto" and "Manual" mode present the user with a summary o
 
 - ### Confirm Installation Status [Interactive]
 
-Choose if you will procceed with the installation.
+Decide if you will procceed with the installation.
 
 If you are satisfied with the result (presented to you in the previous step and still showing on screen), answer "yes".
 
@@ -352,7 +352,7 @@ Also, if a non-rotational drive is being used during installation, and LUKS encr
 
 Graphics setup, encryption setup, swap/swapfile activation/offset calculation, specific filesystem-based options, interactive package pacstrapping, pciid database update, auto configuration of your timezone based on your computer's ip address, makepkg optimization, sysctl / mkinitcpio / udisks / systemd / sudoers file configuration, systemd services activation etc. all happen here.
 
-As mentioned earlier, configuration takes place using only the respective drop-in directories and not the original '.conf' files, where applicable.
+As mentioned earlier, configuration takes place using only the respective drop-in directories and never the original ".conf" files, where applicable.
 
 "Optimized Plasma" option offers KDE Plasma with maximum system configuration and optimizations.
 
