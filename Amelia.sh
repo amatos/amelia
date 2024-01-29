@@ -1,62 +1,52 @@
 #!/bin/bash
 
 # Amelia Installer
-# Version: 3.0
+# Version: 3.1
 
 ###########################################################################################
 # ### COLOR FUNCTIONS ###
 
-    red="\e[31m"
-  redbg="\e[5;1;41m"
-  green="\e[32m"
- yellow="\e[33m"
-   blue="\e[94m"
-   cyan="\e[36m"
- purple="\e[35m"
-     nc="\e[0m"
-  blink="\e[5m"
-reverse="\e[7m"
- bright="\e[1m"
- bwhite="\e[0;97m"
-
+        red="\e[31m"
+        redbg="\e[5;1;41m"
+        green="\e[32m"
+        yellow="\e[33m"
+        blue="\e[94m"
+        cyan="\e[36m"
+        purple="\e[35m"
+        nc="\e[0m"
+        blink="\e[5m"
+        reverse="\e[7m"
+        bright="\e[1m"
+        bwhite="\e[0;97m"
 RED(){
-    echo -e "${red} $1${nc}"
+        echo -e "${red} $1${nc}"
 }
-
 REDB(){
-    echo -e "${redb} $1${nc}"
+        echo -e "${redb} $1${nc}"
 }
-
 REDBG(){
-    echo -e "${redbg} $1${nc}"
+        echo -e "${redbg} $1${nc}"
 }
-
 GREEN(){
-    echo -e "${green} $1${nc}"
+        echo -e "${green} $1${nc}"
 }
-
 YELLOW(){
-    echo -e "${yellow} $1${nc}"
+        echo -e "${yellow} $1${nc}"
 }
-
 BLUE(){
-    echo -e "${blue} $1${nc}"
+        echo -e "${blue} $1${nc}"
 }
-
 CYAN(){
-    echo -e "${cyan} $1${nc}"
+        echo -e "${cyan} $1${nc}"
 }
-
 PURPLE(){
-    echo -e "${purple} $1${nc}"
+        echo -e "${purple} $1${nc}"
 }
-
 NC(){
-    echo -e "${nc} $1${nc}"
+        echo -e "${nc} $1${nc}"
 }
-
 WHITEB(){
-    echo -e "${bwhite} $1${nc}"
+        echo -e "${bwhite} $1${nc}"
 }
 
 # ### END COLOR FUNCTIONS ###
@@ -228,7 +218,24 @@ ok (){
 
 ==> [${green}${prompt} OK${nc}] "
 }
+#----------------------------------------------------------
+completion (){
+        sleep 0.5
+        CYAN "
 
+
+*******************************
+
+###  Installation Complete  ###
+
+
+ $(date)
+
+*******************************
+
+
+        "
+}
 # ### END PROMPT FUNCTIONS ###
 ###########################################################################################
 
@@ -240,6 +247,7 @@ first_check (){
     if [[ -f /usr/share/kbd/consolefonts/ter-v20b.psf.gz && -f /usr/share/kbd/consolefonts/ter-v32b.psf.gz && "${tty}" == *"tty"* ]]; then
         until slct_font; do : ; done
     elif [[ -f /usr/share/kbd/consolefonts/ter-v20b.psf.gz && -f /usr/share/kbd/consolefonts/ter-v32b.psf.gz && "${tty}" == *"pts"* ]]; then
+
         YELLOW "
 
       ###  Supported 'Terminus Font' detected. Switch to console (tty) and re-run the installer to activate "
@@ -263,11 +271,10 @@ REDBG "     ----------------------------------------
         "
     fi
 }
-
 ###########################################################################################
 slct_font (){
 
-        prompt="Fonts"
+        local prompt="Fonts"
         sleep 0.5
         NC "
 ______________________
@@ -303,7 +310,7 @@ Enter a number: "
 ###########################################################################################
 uefi_check (){
 
-        prompt="UEFI Mode"
+        local prompt="UEFI Mode"
         sleep 0.5
         NC "
 ______________________________
@@ -321,7 +328,7 @@ ${purple}###${nc} UEFI Mode Verification ${purple}###${nc}
 ###########################################################################################
 upd_clock (){
 
-        prompt="System Clock"
+        local prompt="System Clock"
         sleep 0.5
         NC "
 ___________________________
@@ -334,7 +341,7 @@ ${purple}###${nc} System Clock Update ${purple}###${nc}
 ###########################################################################################
 dtct_microcode (){
 
-        prompt="Microcode"
+        local prompt="Microcode"
         sleep 0.5
         NC "
 ___________________________
@@ -388,23 +395,23 @@ Enter a number: "
 
     case "${menu}" in
         1)
-        until persnl_submn; do : ; done;;
+            until persnl_submn; do : ; done ;;
         2)
-        until sys_submn; do : ; done;;
+            until sys_submn; do : ; done ;;
         3)
-        until dsks_submn; do : ; done;;
+            until dsks_submn; do : ; done ;;
         4)
-        until instl; do : ; done;;
+            instl ;;
         "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
 
         [!] Please select a Submenu "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
 }
 ###########################################################################################
@@ -435,25 +442,25 @@ Enter a number: "
 
     case "${persmenu}" in
         1)
-        until slct_locale; do : ; done
-        until slct_kbd; do : ; done
-        return 1;;
+            until slct_locale; do : ; done
+            until slct_kbd; do : ; done
+            return 1 ;;
         2)
-        until user_setup; do : ; done
-        until rootuser_setup; do : ; done
-        until slct_hostname; do : ; done
-        return 1;;
+            until user_setup; do : ; done
+            until rootuser_setup; do : ; done
+            until slct_hostname; do : ; done
+            return 1 ;;
         "")
-        until main_menu; do : ; done;;
+            until main_menu; do : ; done ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
 }
 ###########################################################################################
 slct_locale (){
 
-        prompt="Locale"
+        local prompt="Locale"
         sleep 0.5
         NC "
 ________________________
@@ -498,7 +505,7 @@ Enter your Locale ${bwhite}(empty for 'en_US')${blue}: "
 ###########################################################################################
 slct_kbd (){
 
-        prompt="Keyboard Layout"
+        local prompt="Keyboard Layout"
         sleep 0.5
         NC "
 _________________________________
@@ -544,7 +551,7 @@ Enter your keyboard layout ${bwhite}(empty for 'us')${blue}: "
 ###########################################################################################
 user_setup (){
 
-        prompt="User"
+        local prompt="User"
         sleep 0.5
         NC "
 __________________
@@ -604,7 +611,7 @@ Re-enter${nc} ${cyan}"${USERNAME}"'s ${blue}password: "
 ###########################################################################################
 rootuser_setup (){
 
-        prompt="Root User"
+        local prompt="Root User"
         sleep 0.5
         NC "
 _______________________
@@ -645,7 +652,7 @@ Re-enter${nc} ${cyan}Root ${blue}user's password: "
 ###########################################################################################
 slct_hostname (){
 
-        prompt="Hostname"
+        local prompt="Hostname"
         sleep 0.5
         NC "
 ______________________
@@ -711,36 +718,36 @@ Enter a number: "
 
     case "${sysmenu}" in
         1)
-        until slct_krnl; do : ; done
-        until ask_bootldr; do : ; done
-        return 1;;
+            until slct_krnl; do : ; done
+            until ask_bootldr; do : ; done
+            return 1 ;;
         2)
-        until ask_fs; do : ; done
-        until ask_swap; do : ; done
-        return 1;;
+            until ask_fs; do : ; done
+            until ask_swap; do : ; done
+            return 1 ;;
         3)
-        until dtct_vga; do : ; done
-        return 1;;
+            until dtct_vga; do : ; done
+            return 1 ;;
         4)
-        until slct_dsktp; do : ; done
-        return 1;;
+            until slct_dsktp; do : ; done
+            return 1 ;;
         5)
-        until boot_entr; do : ; done
-        return 1;;
+            until boot_entr; do : ; done
+            return 1 ;;
         6)
-        until wireless_rgd; do : ; done
-        return 1;;
+            until wireless_rgd; do : ; done
+            return 1 ;;
         "")
-        until main_menu; do : ; done;;
+            until main_menu; do : ; done ;;
         *)
-        invalid
-        return 1;;
+            invalidlocal
+            return 1 ;;
     esac
 }
 ###########################################################################################
 slct_krnl (){
 
-        prompt="Kernel"
+        local prompt="Kernel"
         sleep 0.5
         NC "
 ________________________
@@ -768,38 +775,40 @@ Enter a number: "
 
     case "${kernelnmbr}" in
         1)
-        kernel="linux"
-        kernelname="'Linux'"
-        entrname="Arch Linux";;
+            kernel="linux"
+            kernelname="'Linux'"
+            entrname="Arch Linux" ;;
         2)
-        kernel="linux-lts"
-        kernelname="'Linux LTS'"
-        entrname="Arch Linux LTS";;
+            kernel="linux-lts"
+            kernelname="'Linux LTS'"
+            entrname="Arch Linux LTS" ;;
         3)
-        kernel="linux-hardened"
-        kernelname="'Linux Hardened'"
-        entrname="Arch Linux Hardened";;
+            kernel="linux-hardened"
+            kernelname="'Linux Hardened'"
+            entrname="Arch Linux Hardened" ;;
         4)
-        kernel="linux-zen"
-        kernelname="'Linux Zen'"
-        entrname="Arch Linux Zen";;
+            kernel="linux-zen"
+            kernelname="'Linux Zen'"
+            entrname="Arch Linux Zen" ;;
         "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
 
         [!] Please select a Kernel "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
+
         sleep 0.5
         YELLOW "
 
         ###  The ${kernelname} kernel has been selected
         "
     if [[ "${kernelnmbr}" == "3" ]]; then
+
         CYAN "
         [!] Swapping is not supported
         "
@@ -809,7 +818,7 @@ Enter a number: "
 ###########################################################################################
 ask_bootldr (){
 
-        prompt="Bootloader"
+        local prompt="Bootloader"
         sleep 0.5
         NC "
 ____________________________
@@ -833,34 +842,34 @@ Enter a number: "
 
     case "${bootloader}" in
         1)
-        sleep 0.5
-        YELLOW "
+            sleep 0.5
+            YELLOW "
 
         ###  'Systemd-boot' has been selected
-        ";;
+            " ;;
         2)
-        sleep 0.5
-        YELLOW "
+            sleep 0.5
+            YELLOW "
 
         ###  'Grub' has been selected
-        ";;
+            " ;;
         "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
 
         [!] Please select a Bootloader "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
         ok
 }
 ###########################################################################################
 ask_fs (){
 
-        prompt="Filesystem Setup"
+        local prompt="Filesystem Setup"
         sleep 0.5
         NC "
 ____________________________
@@ -885,55 +894,55 @@ Enter a number: "
 
     case "${fs}" in
         1)
-        fsname="'Ext4'"
-        fs_mod="ext4"
-        fstools="e2fsprogs"
-        roottype="/ROOT"
-        sleep 0.5
-        YELLOW "
+            fsname="'Ext4'"
+            fs_mod="ext4"
+            fstools="e2fsprogs"
+            roottype="/ROOT"
+            sleep 0.5
+            YELLOW "
         ###  "${fsname}" has been selected
-        ";;
+            " ;;
         2)
-        fsname="'Btrfs'"
-        fs_mod="btrfs"
-        fstools="btrfs-progs"
-        roottype="/@"
-        btrfs_opts="rootflags=subvol=@"
-        sleep 0.5
-        YELLOW "
+            fsname="'Btrfs'"
+            fs_mod="btrfs"
+            fstools="btrfs-progs"
+            roottype="/@"
+            btrfs_opts="rootflags=subvol=@"
+            sleep 0.5
+            YELLOW "
         ###  "${fsname}" has been selected
-        "
-        sleep 0.5
-        YELLOW "
+            "
+            sleep 0.5
+            YELLOW "
 
         >  Label your Btrfs snapshot directory: "
-        BLUE "
+            BLUE "
 
 
 Enter a name: "
-        read -p "
+            read -p "
 ==> " snapname
 
             if [[ -z "${snapname}" ]]; then
                 invalid
                 return 1
-            fi;;
+            fi ;;
         "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
         [!] Please select a Filesystem "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
         ok
 }
 ###########################################################################################
 ask_swap (){
 
-        prompt="Swap Setup"
+        local prompt="Swap Setup"
         sleep 0.5
         NC "
 ______________________
@@ -959,48 +968,49 @@ Enter a number: "
 
     case "${swapmode}" in
         1)
-        swaptype="swappart"
-        sleep 0.5
-        YELLOW "
+            swaptype="swappart"
+            sleep 0.5
+            YELLOW "
 
         ###  Swap Partition has been selected
-        ";;
+            " ;;
         2)
             if [[ "${fs}" == "1" ]]; then
                 swaptype="swapfile"
             elif [[ "${fs}" == "2" ]]; then
                 swaptype="swapfile_btrfs"
             fi
-        sleep 0.5
-        YELLOW "
+            sleep 0.5
+            YELLOW "
 
         ###  Swapfile has been selected
 
-        "
-        until set_swapsize; do : ; done;;
+            "
+            until set_swapsize; do : ; done ;;
         3)
-        sleep 0.5
-        YELLOW "
+            sleep 0.5
+            YELLOW "
 
         ###  No Swap will be used
-        "
-        skip;;
+            "
+            skip ;;
         "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
 
         [!] Please make a selection to continue "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
         ok
 }
 ###########################################################################################
 set_swapsize (){
 
+        local prompt="Swapsize"
         BLUE "
 Enter Swapfile size ${bwhite}(in GiB)${blue}: "
         read -p "
@@ -1015,10 +1025,9 @@ Enter Swapfile size ${bwhite}(in GiB)${blue}: "
         NC "
         "
         return 1
-    elif [[ "${swapsize}" =~ [[:digit:]] ]]; then
-        NC "
 
-==> [${green}Swapsize OK${nc}] "
+    elif [[ "${swapsize}" =~ [[:digit:]] ]]; then
+        ok
 
     else
         sleep 0.5
@@ -1033,7 +1042,7 @@ Enter Swapfile size ${bwhite}(in GiB)${blue}: "
 ###########################################################################################
 dtct_vga (){
 
-        prompt="Graphics"
+        local prompt="Graphics"
         sleep 0.5
         NC "
 ______________________
@@ -1114,7 +1123,7 @@ Enter [y/n]: "
                 BLUE "
 
 
-Enter a number ${bwhite}(empty to Skip)${blue}: "
+Enter a number ${bwhite}(empty to skip)${blue}: "
                 read -p "
 ==> " islands
                     if [[ -z "${islands}" ]]; then
@@ -1304,7 +1313,8 @@ ${nvidiacards}
 ###########################################################################################
 slct_dsktp (){
 
-        prompt="Desktop Setup"
+        local prompt="Desktop Setup"
+        custompkgs=""
         sleep 0.5
         NC "
 _________________________
@@ -1345,115 +1355,118 @@ Enter a number: "
 ==> " packages
 
     case "${packages}" in
-        1)  desktopname="'Plasma'";;
-        2)  desktopname="'Optimized Plasma'";;
-        3)  desktopname="'Gnome'";;
-        4)  desktopname="'Xfce'";;
-        5)  desktopname="'Cinnamon'"
-        sleep 0.5
-        YELLOW "
+        1)
+            desktopname="'Plasma'" ;;
+        2)
+            desktopname="'Optimized Plasma'" ;;
+        3)
+            desktopname="'Gnome'" ;;
+        4)
+            desktopname="'Xfce'" ;;
+        5)
+            desktopname="'Cinnamon'"
+            sleep 0.5
+            YELLOW "
 
 
-        ### NOTE: Cinnamon desktop lacks a native Terminal emulator by design
+        ###  NOTE: Cinnamon desktop lacks a native Terminal emulator by design
 
-        ### You can use linux console (ctrl+alt+F3) for shell access
+        ###  You can use linux console (ctrl+alt+F3) for shell access
 
 
         >  Install 'gnome-terminal' for convenience ? [y/n] "
-        BLUE "
+            BLUE "
 
 
 Enter [y/n]: "
-        read -p "
+            read -p "
 ==> " console
 
         case "${console}" in
             y)
-            terminal="gnome-terminal"
-            sleep 0.5
-            NC "
+                terminal="gnome-terminal"
+                sleep 0.5
+                NC "
 
-==> [${green}Terminal OK${nc}] ";;
+==> [${green}Terminal OK${nc}] " ;;
             n)
-            NC
-            skip
-            sleep 0.5
-            NC "
-
-==> [${green}Terminal OK${nc}] ";;
+                NC
+                skip ;;
             "")
-            sleep 0.5
-            NC
-            RED "
-            [!] Please make a selection.. "
-            reload
-            return 1 ;;
+                sleep 0.5
+                NC
+                RED "
+            [!] Please type 'y' or 'n' to continue "
+                reload
+                return 1 ;;
             *)
-            invalid
-            return 1 ;;
+                invalid
+                return 1 ;;
         esac ;;
 
-        6)  desktopname="'Deepin'";;
-        7)  desktopname="'Budgie'"
-        sleep 0.5
-        YELLOW "
+        6)
+            desktopname="'Deepin'" ;;
+        7)
+            desktopname="'Budgie'"
+            sleep 0.5
+            YELLOW "
 
 
-        ### NOTE: Budgie desktop lacks a native Terminal emulator by design
+        ###  NOTE: Budgie desktop lacks a native Terminal emulator by design
 
-        ### You can use linux console (ctrl+alt+F3) for shell access
+        ###  You can use linux console (ctrl+alt+F3) for shell access
 
 
         >  Install 'gnome-terminal' for convenience ? [y/n] "
-        BLUE "
+            BLUE "
 
 
 Enter [y/n]: "
-        read -p "
+            read -p "
 ==> " console
 
         case "${console}" in
             y)
-            terminal="gnome-terminal"
-            sleep 0.5
-            NC "
+                terminal="gnome-terminal"
+                sleep 0.5
+                NC "
 
-==> [${green}Terminal OK${nc}] ";;
+==> [${green}Terminal OK${nc}] " ;;
             n)
-            NC
-            skip
-            sleep 0.5
-            NC "
-
-==> [${green}Terminal OK${nc}] ";;
+                NC
+                skip ;;
             "")
-            sleep 0.5
-            NC
-            RED "
-            [!] Please make a selection.. "
-            reload
-            return 1 ;;
+                sleep 0.5
+                NC
+                RED "
+            [!] Please type 'y' or 'n' to continue "
+                reload
+                return 1 ;;
             *)
-            invalid
-            return 1 ;;
+                invalid
+                return 1 ;;
         esac ;;
 
-        8)  desktopname="'Lxqt'";;
-        9)  desktopname="'Mate'";;
-       10)  desktopname="'Base System'";;
-       11)  desktopname="'Custom System'"
-        until cust_sys; do :; done
-        return 0;;
+        8)
+            desktopname="'Lxqt'" ;;
+        9)
+            desktopname="'Mate'" ;;
+       10)
+            desktopname="'Base System'" ;;
+       11)
+            desktopname="'Custom System'"
+            until cust_sys; do :; done
+            return 0 ;;
        "")
-        sleep 0.5
-        RED "
+            sleep 0.5
+            RED "
 
         [!] Please make a selection.. "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
 
         sleep 0.5
@@ -1461,12 +1474,8 @@ Enter [y/n]: "
 
 
         ###  ${desktopname} has been selected
-        "
 
-        sleep 0.5
-        YELLOW "
-
-        ### NOTE: 'base' package group does not include the tools needed for building packages
+        ###  NOTE: 'base' package group does not include the tools needed for building packages
 
 
         >  Install 'base-devel' package group ? [y/n] "
@@ -1479,95 +1488,73 @@ Enter [y/n]: "
 
     case "${dev}" in
         y)
-        devel="base-devel"
-        sleep 0.5
-        NC "
+            devel="base-devel"
+            sleep 0.5
+            NC "
 
-==> [${green}base-devel OK${nc}] ";;
+==> [${green}base-devel OK${nc}] " ;;
         n)
-        NC
-        skip
-        sleep 0.5
-        NC "
-
-==> [${green}base-devel OK${nc}] ";;
+            NC
+            skip ;;
         "")
-        sleep 0.5
-        NC
-        RED "
+            sleep 0.5
+            NC
+            RED "
         [!] Please type 'y' or 'n' to continue "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
+
+        sleep 0.5
+        YELLOW "
+
+
+        ###  NOTE: Custom Kernel Parameters can be set at boot time
+
+
+        >  Enter your own Kernel Parameters ? [y/n] "
+        BLUE "
+
+
+Enter [y/n]: "
+        read -p "
+==> " ask_param
+
+        case "${ask_param}" in
+            y)
+                add_prmtrs ;;
+            n)
+                NC
+                skip ;;
+            "")
+                sleep 0.5
+                NC
+                RED "
+        [!] Please type 'y' or 'n' to continue "
+                reload
+                return 1 ;;
+            *)
+                invalid
+                return 1 ;;
+        esac
         ok
 }
 ###########################################################################################
 cust_sys (){
 
-        prompt="Custom System"
-        sleep 0.5
-        NC "
-___________________________
-
-${purple}###${nc} Custom System Setup ${purple}###${nc}
-        "
-        YELLOW "
-
-        >  Create your own system: "
-        NC "
-
-            [1]  Add Packages to be Installed
-
-            [2]  Add Services to be Enabled
-
-            [3]  Add Kernel Parameters to be Set at boot time
-
-            [ ]  Done "
-        BLUE "
-
-
-Enter a number: "
-        read -p "
-==> " customsys
-
-    case "${customsys}" in
-        1)
+        local prompt="Custom System"
         until add_pkgs; do : ; done
-        return 1 ;;
-        2)
         until add_services; do : ; done
-        return 1 ;;
-        3)
         until add_prmtrs; do : ; done
-        return 1 ;;
-        "")
-        if [[ "${quick_install}" == "1" ]]; then
-            if [[ -z "${custompkgs}" ]]; then
-                until slct_dsktp; do : ; done
-            else
-                ok
-                until instl; do : ; done
-            fi
-        else
-            if [[ -z "${custompkgs}" ]]; then
-                until slct_dsktp; do : ; done
-            else
-                ok
-                until sys_submn; do : ; done
-            fi
-        fi ;;
-        *)
-        invalid
-        return 1 ;;
-    esac
+        ok
 }
 ###########################################################################################
 add_pkgs (){
 
-        prompt="Custom Packages"
+        local prompt="Custom Packages"
         sleep 0.5
         NC "
 _____________________________
@@ -1576,55 +1563,79 @@ ${purple}###${nc} Custom Packages Setup ${purple}###${nc}
         "
         BLUE "
 
-
 Enter your packages ${bwhite}(space-seperated)${blue}: "
         read -p "
 ==> " custompkgs
 
+    if [[ -z "${custompkgs}" ]]; then
+        sleep 0.5
+        RED "
+
+        [!] Please enter package(s) to continue "
+        reload
+        return 1
+    else
         ok
+    fi
 }
 ###########################################################################################
 add_services (){
 
-        prompt="Custom Services"
+        local prompt="Custom Services"
         sleep 0.5
         NC "
 _____________________________
 
 ${purple}###${nc} Custom Services Setup ${purple}###${nc}
         "
-        BLUE "
+        YELLOW "
 
+        ###  Empty to skip "
+
+        BLUE "
 
 Enter your services ${bwhite}(space-seperated)${blue}: "
         read -p "
 ==> " customservices
 
+    if [[ -z "${customservices}" ]]; then
+        NC
+        skip
+    else
         ok
+    fi
 }
 ###########################################################################################
 add_prmtrs (){
 
-        prompt="Custom Kernel Parameters"
+        local prompt="Kernel Parameters"
         sleep 0.5
         NC "
 ______________________________________
 
 ${purple}###${nc} Custom Kernel Parameters Setup ${purple}###${nc}
         "
-        BLUE "
+        YELLOW "
 
+        ###  Empty to skip "
+
+        BLUE "
 
 Enter your Kernel parameters ${bwhite}(space-seperated)${blue}: "
         read -p "
 ==> " cust_bootopts
 
+    if [[ -z "${cust_bootopts}" ]]; then
+        NC
+        skip
+    else
         ok
+    fi
 }
 ###########################################################################################
 boot_entr (){
 
-        prompt="Boot Entries"
+        local prompt="Boot Entries"
         sleep 0.5
         NC "
 _________________________________
@@ -1644,7 +1655,7 @@ ${purple}###${nc} EFI Boot Entries Deletion ${purple}###${nc}
         BLUE "
 
 
-Enter a${nc} ${cyan}BootOrder${blue} number for Deletion ${bwhite}(empty to Skip)${blue}: "
+Enter a${nc} ${cyan}BootOrder${blue} number for Deletion ${bwhite}(empty to skip)${blue}: "
         read -p "
 ==> " boot_entry
         NC
@@ -1677,7 +1688,7 @@ Enter a${nc} ${cyan}BootOrder${blue} number for Deletion ${bwhite}(empty to Skip
 ###########################################################################################
 wireless_rgd (){
 
-        prompt="Wireless Regdom Setup"
+        local prompt="Wireless Regdom Setup"
         hypervisor="$(systemd-detect-virt)"
         sleep 0.5
         NC "
@@ -1698,7 +1709,7 @@ ${purple}###${nc} Wireless Regulatory Domain Setup ${purple}###${nc}
 
         BLUE "
 
-Enter your Country Code, ie:${nc} ${cyan}US ${bwhite}(empty to Skip)${blue}: "
+Enter your Country Code, ie:${nc} ${cyan}US ${bwhite}(empty to skip)${blue}: "
         read -p "
 ==> " REGDOM
 
@@ -1754,9 +1765,12 @@ Enter a number: "
 ==> " diskmenu
 
     case ${diskmenu} in
-        1)  until gpt_mngr; do : ; done;;
-        2)  until disk_mngr; do : ; done;;
-        3)  until instl_dsk; do : ; done
+        1)
+            until gpt_mngr; do : ; done ;;
+        2)
+            until disk_mngr; do : ; done ;;
+        3)
+            until instl_dsk; do : ; done
                 if [[ -z "${fs}" ]]; then
                     sleep 0.5
                     RED "
@@ -1767,16 +1781,18 @@ Enter a number: "
                     until ask_fs; do : ; done
                 fi
             until ask_crypt; do : ; done
-            return 1;;
-       "")  until main_menu; do : ; done;;
-        *)  invalid
-            return 1;;
+            return 1 ;;
+       "")
+            until main_menu; do : ; done ;;
+        *)
+            invalid
+            return 1 ;;
     esac
 }
 ###########################################################################################
 gpt_mngr (){
 
-        prompt="Disk GPT"
+        local prompt="Disk GPT"
         sleep 0.5
         NC "
 ________________________
@@ -1795,7 +1811,7 @@ ${disks} "
         BLUE "
 
 
-Enter a disk number ${bwhite}(empty to Skip)${blue}: "
+Enter a disk number ${bwhite}(empty to skip)${blue}: "
         read -p "
 ==> " gpt_dsk_nmbr
 
@@ -1827,7 +1843,7 @@ ______________________________________________
             skip
             ok
 
-            if [[ "${quick_install}" == "1" ]]; then
+            if [[ "${install}" == "1" ]]; then
                 until instl_dsk; do : ; done
             else
                 until dsks_submn; do : ; done
@@ -1838,7 +1854,7 @@ ______________________________________________
 ###########################################################################################
 disk_mngr (){
 
-        prompt="Disks"
+        local prompt="Disks"
         sleep 0.5
         NC "
 _________________________
@@ -1868,7 +1884,7 @@ ${disks}"
         BLUE "
 
 
-Enter a disk number${bwhite} (empty to Skip)${blue}: "
+Enter a disk number ${bwhite}(empty to skip)${blue}: "
         read -p "
 ==> " cgdsk_nmbr
 
@@ -1975,7 +1991,7 @@ Enter a disk number: "
 ###########################################################################################
 sanity_check (){
 
-        prompt="Installation Disk"
+        local prompt="Installation Disk"
         sleep 0.5
         NC "
 ____________________
@@ -2001,9 +2017,9 @@ ${purple}###${nc} Sanity Check ${purple}###${nc}
             -->  Please comply with the Discoverable Partitions Specification to continue..
 
 
-        ### Ensure that a Linux x86-64 Root (/) Partition with a valid GUID code ${nc}(8304)${yellow} is present on disk
+        ###  Ensure that a Linux x86-64 Root (/) Partition with a valid GUID code ${nc}(8304)${yellow} is present on disk
 
-        ### Ensure that an EFI System Partition with a valid GUID code ${nc}(ef00)${yellow} is present on disk "
+        ###  Ensure that an EFI System Partition with a valid GUID code ${nc}(ef00)${yellow} is present on disk "
         sleep 0.5
         RED "
 
@@ -2029,7 +2045,7 @@ ${purple}###${nc} Sanity Check ${purple}###${nc}
             -->  Please comply with the Discoverable Partitions Specification to continue..
 
 
-        ### Ensure that a Linux x86-64 Root (/) Partition with a valid GUID code ${nc}(8304)${yellow} is present on disk "
+        ###  Ensure that a Linux x86-64 Root (/) Partition with a valid GUID code ${nc}(8304)${yellow} is present on disk "
         sleep 0.5
         RED "
 
@@ -2055,7 +2071,7 @@ ${purple}###${nc} Sanity Check ${purple}###${nc}
             -->  Please comply with the Discoverable Partitions Specification to continue..
 
 
-        ### Ensure that an EFI System Partition with a valid GUID code ${nc}(ef00)${yellow} is present on disk "
+        ###  Ensure that an EFI System Partition with a valid GUID code ${nc}(ef00)${yellow} is present on disk "
         sleep 0.5
         RED "
 
@@ -2074,55 +2090,55 @@ ${purple}###${nc} Sanity Check ${purple}###${nc}
         NC "
 
 ==> [EFI System Partition ${green}OK${nc}] "
-    fi
 
-    if [[ "${swapmode}" == "1" ]]; then
-        if [[ -e "${swap_dev}" ]]; then
+        if [[ -e "${home_dev}" ]]; then
             sleep 0.5
             NC "
 
+==> [Linux (/Home) ${green}OK${nc}] "
+        fi
+
+        if [[ "${swapmode}" == "1" ]]; then
+            if [[ -e "${swap_dev}" ]]; then
+                sanity="ok"
+                sleep 0.5
+                NC "
+
 ==> [Linux Swap ${green}OK${nc}] "
-        else
-            sanity="no"
-            sleep 0.5
-            RED "
+            else
+                sanity="no"
+                sleep 0.5
+                RED "
 
         [!] Linux Swap Partition not detected "
-            sleep 0.5
-            YELLOW "
+                sleep 0.5
+                YELLOW "
 
             -->  Please comply with the Discoverable Partitions Specification to continue..
 
 
-        ### Ensure that a Linux Swap Partition with a valid GUID code ${nc}(8200)${yellow} is present on disk "
-            sleep 0.5
-            RED "
+        ###  Ensure that a Linux Swap Partition with a valid GUID code ${nc}(8200)${yellow} is present on disk "
+                sleep 0.5
+                RED "
 
         [!] Sanity Check Failed [!] "
-            sleep 2
-            reload
-            until disk_mngr; do : ; done
-            return 0
+                sleep 2
+                reload
+                until disk_mngr; do : ; done
+                return 0
+            fi
         fi
-    fi
-
-    if [[ -e "${home_dev}" ]]; then
-        sleep 0.5
-        NC "
-
-==> [Linux (/Home) ${green}OK${nc}] "
-    fi
-
         sanity="ok"
-
-    if [[ "${sanity}" == "ok" ]]; then
-        ok
     fi
+
+
+
+    [[ "${sanity}" == "ok" ]] && ok
 }
 ###########################################################################################
 ask_crypt (){
 
-        prompt="Encryption Setup"
+        local prompt="Encryption Setup"
         sleep 0.5
         NC "
 ________________________
@@ -2257,100 +2273,96 @@ Enter a name: "
 ###########################################################################################
 instl (){
 
-        quick_install="1"
+        install="1"
 
-    if [[ -z "${SETLOCALE}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${SETLOCALE}" ]]; then
+            sleep 0.5
+            RED "
 
 
         [!] Please complete 'Locale & Keyboard Layout Selection' to continue
 
-        "
-        until slct_locale; do : ; done
-        until slct_kbd; do : ; done
-    fi
+            "
+            until slct_locale; do : ; done
+            until slct_kbd; do : ; done
+        fi
 
-    if [[ -z "${USERNAME}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${USERNAME}" ]]; then
+            sleep 0.5
+            RED "
 
 
 
         [!] Please complete 'User, Root User & Hostname Setup' to continue
 
-        "
-        until user_setup; do : ; done
-        until rootuser_setup; do : ; done
-        until slct_hostname; do : ; done
-    fi
+            "
+            until user_setup; do : ; done
+            until rootuser_setup; do : ; done
+            until slct_hostname; do : ; done
+        fi
 
-    if [[ -z "${kernelnmbr}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${kernelnmbr}" ]]; then
+            sleep 0.5
+            RED "
 
 
 
         [!] Please complete 'Kernel & Bootloader Selection' to continue
 
-        "
-        until slct_krnl; do : ; done
-        until ask_bootldr; do : ; done
-    fi
+            "
+            until slct_krnl; do : ; done
+            until ask_bootldr; do : ; done
+        fi
 
-    if [[ -z "${fs}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${fs}" ]]; then
+            sleep 0.5
+            RED "
 
 
 
         [!] Please complete 'Filesystem & Swap Selection' to continue
 
-        "
-        until ask_fs; do : ; done
-        until ask_swap; do : ; done
-    fi
+            "
+            until ask_fs; do : ; done
+            until ask_swap; do : ; done
+        fi
 
-    if [[ -z "${vgaconf}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${vgaconf}" ]]; then
+            sleep 0.5
+            RED "
 
 
 
         [!] Please complete 'Graphics Setup' to continue
 
-        "
-        until dtct_vga; do : ; done
-    fi
+            "
+            until dtct_vga; do : ; done
+        fi
 
-    if [[ -z "${packages}" ]]; then
-        sleep 0.5
-        RED "
+        if [[ -z "${packages}" ]]; then
+            sleep 0.5
+            RED "
 
 
 
         [!] Please complete 'Desktop Selection' to continue
 
-        "
-        until slct_dsktp; do : ; done
-    fi
+            "
+            until slct_dsktp; do : ; done
+        fi
 
-    if [[ "${sanity}" != "ok" ]]; then
-        sleep 0.5
-        RED "
+        if [[ "${sanity}" != "ok" ]]; then
+            sleep 0.5
+            RED "
 
 
         [!] Please complete 'Installation Disk' & 'Encryption' to continue
 
-        "
-        until instl_dsk; do : ; done
-        until ask_crypt; do : ; done
-    fi
-
+            "
+            until instl_dsk; do : ; done
+            until ask_crypt; do : ; done
+        fi
 #------------------------------------------------------------------------------------------
-
-    if [[ -z "${completion}" ]]; then
-
         if [[ "${swapmode}" == "1" ]]; then
             until "${swaptype}"; do : ; done
         fi
@@ -2358,6 +2370,7 @@ instl (){
         if [[ "${encrypt}" == "no" ]]; then
             until set_mode; do : ; done
             until confirm_status; do : ; done
+            return 0
 
         elif [[ "${encrypt}" == "yes" ]]; then
             until sec_erase; do : ; done
@@ -2368,19 +2381,18 @@ instl (){
             if [[ "${swapmode}" == "2" ]]; then
                 until "${swaptype}"; do : ; done
             fi
-
             if [[ -n "${REGDOM}" ]]; then
                 until wireless_regdom; do : ; done
             fi
 
             until chroot_conf; do : ; done
+            return 0
         fi
-    fi
 }
 ###########################################################################################
 swappart (){
 
-        prompt="Swap Partition"
+        local prompt="Swap Partition"
         sleep 0.5
         NC "
 _________________________________
@@ -2393,7 +2405,6 @@ ${purple}###${nc} Swap Partition Activation ${purple}###${nc}
         err_reload
         until disk_mngr; do : ; done
         until swappart; do : ; done
-        return 0
     fi
 }
 ###########################################################################################
@@ -2423,17 +2434,17 @@ Enter a Mode number: "
 
     case "${setmode}" in
         1)
-        until auto_mode; do : ; done;;
+            until auto_mode; do : ; done ;;
         2)
-        until manual_mode; do : ; done;;
+            until manual_mode; do : ; done ;;
         "")
-        RED "
+            RED "
         [!] Please select a Mode to continue "
-        reload
-        return 1;;
+            reload
+            return 1 ;;
         *)
-        invalid
-        return 1;;
+            invalid
+            return 1 ;;
     esac
 
         sleep 0.5
@@ -2644,10 +2655,14 @@ form_efi (){
 
         sleep 0.5
         NC "
-______________________________
+_____________________________
 
-${purple}###${nc} Format /BOOT Partition ${purple}###${nc}
+${purple}###${nc} Format Boot Partition ${purple}###${nc}
         "
+            form_boot_nmbr=" "
+
+    while [[ -n "${form_boot_nmbr}" ]]; do
+
         YELLOW "
 
         >  Select a partition to format as EFI [/BOOT] "
@@ -2657,14 +2672,14 @@ ${volumes} "
         BLUE "
 
 
-Enter a partition number: "
+Enter a partition number ${bwhite}(empty to skip and proceed)${blue}: "
         read -p "
 ==> " form_boot_nmbr
 
     if [[ -n "${form_boot_nmbr}" ]]; then
         bootpart="$(echo "${volumes}" | awk "\$1 == "${form_boot_nmbr}" { print \$2}")"
             if [[ -e "${bootpart}" ]]; then
-                if mkfs.fat -F 32 -n BOOT "${bootpart}"; then
+                if mkfs.fat -F 32 -n Boot "${bootpart}"; then
                     sleep 0.5
                     NC "
 
@@ -2686,10 +2701,10 @@ Enter a partition number: "
                 invalid
                 return 1
             fi
-    else
-        choice
-        return 1
     fi
+
+    done
+        skip
 }
 ###########################################################################################
 form_root (){
@@ -2700,6 +2715,10 @@ _____________________________
 
 ${purple}###${nc} Format Root Partition ${purple}###${nc}
         "
+        form_root_nmbr=" "
+
+    while [[ -n "${form_root_nmbr}" ]]; do
+
         YELLOW "
 
         >  Select a partition to format as "${fsname}" ["${roottype}"] "
@@ -2709,7 +2728,7 @@ ${volumes} "
         BLUE "
 
 
-Enter a partition number: "
+Enter a partition number ${bwhite}(empty to skip and proceed)${blue}: "
         read -p "
 ==> " form_root_nmbr
 
@@ -2729,6 +2748,7 @@ Enter a partition number: "
                         until disk_mngr; do : ; done
                         until form_root; do : ; done
                         return 0
+
                     fi
 #------------------------------------------------------------------------------------------
                 elif [[ "${fs}" == "2" ]]; then
@@ -2766,14 +2786,19 @@ Enter a partition number: "
                 invalid
                 return 1
             fi
-    else
-        choice
-        return 1
     fi
+
+    done
+        skip
+
 #------------------------------------------------------------------------------------------
+
+if [[ -n "${form_root_nmbr}" ]]; then
+
         rootpartname=" "
 
     while [[ -n "${rootpartname}" ]]; do
+
         sleep 0.5
         YELLOW "
 
@@ -2813,11 +2838,13 @@ Enter a name ${bwhite}(empty to skip and proceed)${blue}: "
 
 ==> [${green}Label "${roottype}" OK${nc}] "
     done
+fi
 }
 ###########################################################################################
 ask_homepart_form (){
 
     if [[ -e "${home_dev}" && "${fs}" == "1" ]]; then
+
         BLUE "
 
 
@@ -2880,13 +2907,14 @@ form_home (){
 
         sleep 0.5
         NC "
-______________________________
+_____________________________
 
-${purple}###${nc} Format /HOME Partition ${purple}###${nc}
+${purple}###${nc} Format Home Partition ${purple}###${nc}
         "
         form_home_nmbr=" "
 
     while [[ -n "${form_home_nmbr}" ]]; do
+
         YELLOW "
 
         >  Select a partition to format as 'Ext4' [/HOME] "
@@ -3031,7 +3059,7 @@ Enter your${nc} ${cyan}"${roottype}"${blue} partition number: "
 ###########################################################################################
 mount_boot (){
 
-        prompt="Mount /BOOT"
+        local prompt="Mount /BOOT"
         sleep 0.5
         NC "
 ____________________________
@@ -3076,7 +3104,7 @@ Enter your${nc} ${cyan}/BOOT${blue} partition number: "
 ###########################################################################################
 mount_home (){
 
-        prompt="Mount /HOME"
+        local prompt="Mount /HOME"
         sleep 0.5
         NC "
 ____________________________
@@ -3122,7 +3150,7 @@ Enter your${nc} ${cyan}/HOME${blue} partition number: "
 ###########################################################################################
 confirm_status (){
 
-        prompt="System Ready"
+        local prompt="System Ready"
         sleep 0.5
         NC "
 ___________________________________
@@ -3154,6 +3182,7 @@ ${purple}###${nc} Confirm Installation Status ${purple}###${nc}
             until wireless_regdom; do : ; done
         fi
         until chroot_conf; do : ; done
+        return 0
 
     elif [[ "${agree}" == "no" ]]; then
         reload
@@ -3175,8 +3204,8 @@ ${purple}###${nc} Unmount Filesystems ${purple}###${nc}
             abort
         fi
 
-        pre_instl
-        instl
+        revise
+        return 0
 
     else
         sleep 0.5
@@ -3187,21 +3216,27 @@ ${purple}###${nc} Unmount Filesystems ${purple}###${nc}
     fi
 }
 ###########################################################################################
-pre_instl (){
+revise (){
 
-    until slct_krnl; do : ; done
-    until ask_bootldr; do : ; done
-    until ask_fs; do : ; done
-    until ask_swap; do : ; done
-    until dtct_vga; do : ; done
-    until slct_dsktp; do : ; done
-    until instl_dsk; do : ; done
-    until ask_crypt; do : ; done
+        until slct_krnl; do : ; done
+        until ask_bootldr; do : ; done
+        until ask_fs; do : ; done
+        until ask_swap; do : ; done
+        until dtct_vga; do : ; done
+        until slct_dsktp; do : ; done
+        until instl_dsk; do : ; done
+        until ask_crypt; do : ; done
+        if [[ "${swapmode}" == "1" ]]; then
+            until "${swaptype}"; do : ; done
+        fi
+        until set_mode; do : ; done
+        until confirm_status; do : ; done
+        return 0
 }
 ###########################################################################################
 sec_erase (){
 
-        prompt="Secure Erasure"
+        local prompt="Secure Erasure"
         sleep 0.5
         NC "
 ___________________________
@@ -3221,7 +3256,7 @@ ${disks}"
         BLUE "
 
 
-Enter a disk number${bwhite} (empty to Skip)${blue}: "
+Enter a disk number ${bwhite}(empty to skip)${blue}: "
         read -p "
 ==> " erase_dsk_nmbr
         NC
@@ -3457,7 +3492,7 @@ ${purple}###${nc} LUKS Encryption ${purple}###${nc}
 ###########################################################################################
 opt_pcmn (){
 
-        prompt="PacMan"
+        local prompt="PacMan"
         countries="$(reflector --list-countries | sed 's|[0-9].*||' | sed 's|-.*||' | sed 's|Country.*||')"
         list=(${countries})
         sleep 0.5
@@ -3562,12 +3597,12 @@ Enter a number: "
         invalid
         return 1
     fi
-    ok
+        ok
 }
 ###########################################################################################
 pacstrap_system (){
 
-        prompt="${desktopname}"
+        local prompt="${desktopname}"
         sleep 0.5
         NC "
 _______________________
@@ -3594,50 +3629,50 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
 
     case "${packages}" in
         1)
-        deskpkgs=""${basepkgs}" plasma konsole"
-        displaymanager="sddm"
-        bluetooth="bluetooth"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" plasma konsole"
+            displaymanager="sddm"
+            bluetooth="bluetooth"
+            network="NetworkManager" ;;
         2)
-        deskpkgs=""${basepkgs}" alsa-firmware alsa-utils arj ark bluedevil breeze-gtk ccache cups-pdf cups-pk-helper dolphin-plugins e2fsprogs efibootmgr elisa exfatprogs fdkaac ffmpegthumbs firefox git glibc-locales gst-libav gst-plugin-libcamera gst-plugin-msdk gst-plugin-opencv gst-plugin-pipewire gst-plugin-qmlgl gst-plugin-va gst-plugin-wpe gst-plugins-ugly gstreamer-vaapi htop icoutils ipp-usb kamera kamoso kate kcalc kde-gtk-config kdegraphics-mobipocket kdegraphics-thumbnailers kdenetwork-filesharing kdeplasma-addons kdesdk-kio kdesdk-thumbnailers kdialog keditbookmarks kget kimageformats5 kinit kio-admin kio-gdrive kio-zeroconf kompare konsole kscreen kvantum kwrited latte-dock libappimage libfido2 libktorrent libmms libnfs libva-utils lirc lrzip lua52-socket lzop mac man-db man-pages mesa-demos mesa-utils nano-syntax-highlighting nss-mdns ntfs-3g okular opus-tools p7zip packagekit-qt5 pacman-contrib partitionmanager pdfmixtool pigz pipewire-alsa pipewire-pulse pkgstats plasma-browser-integration plasma-desktop plasma-disks plasma-firewall plasma-nm plasma-pa plasma-wayland-protocols plasma-wayland-session power-profiles-daemon powerdevil powerline powerline-fonts print-manager python-pyqt5 python-reportlab qbittorrent qt5-feedback qt5-imageformats qt5-virtualkeyboard qt5-xmlpatterns realtime-privileges reflector rng-tools sddm-kcm skanlite sof-firmware soundkonverter sox spectacle sshfs system-config-printer terminus-font timidity++ ttf-ubuntu-font-family ufw-extras unarchiver unrar unzip usb_modeswitch usbutils vdpauinfo vlc vorbis-tools vorbisgain wget xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xsane zip zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting "${nrg_plc}"";;
+            deskpkgs=""${basepkgs}" alsa-firmware alsa-utils arj ark bluedevil breeze-gtk ccache cups-pdf cups-pk-helper dolphin-plugins e2fsprogs efibootmgr exfatprogs fdkaac ffmpegthumbs firefox git glibc-locales gst-libav gst-plugin-libcamera gst-plugin-msdk gst-plugin-opencv gst-plugin-pipewire gst-plugin-qmlgl gst-plugin-va gst-plugin-wpe gst-plugins-ugly gstreamer-vaapi htop icoutils ipp-usb kamera kamoso kate kcalc kde-gtk-config kdegraphics-mobipocket kdegraphics-thumbnailers kdenetwork-filesharing kdeplasma-addons kdesdk-kio kdesdk-thumbnailers kdialog keditbookmarks kget kimageformats5 kinit kio-admin kio-gdrive kio-zeroconf kompare konsole kscreen kvantum kwrited latte-dock libappimage libfido2 libktorrent libmms libnfs libva-utils lirc lrzip lua52-socket lzop mac man-db man-pages mesa-demos mesa-utils nano-syntax-highlighting nss-mdns ntfs-3g okular opus-tools p7zip packagekit-qt5 pacman-contrib partitionmanager pdfmixtool pigz pipewire-alsa pipewire-pulse pkgstats plasma-browser-integration plasma-desktop plasma-disks plasma-firewall plasma-nm plasma-pa plasma-wayland-protocols plasma-wayland-session power-profiles-daemon powerdevil powerline powerline-fonts print-manager python-pyqt5 python-reportlab qbittorrent qt5-feedback qt5-imageformats qt5-virtualkeyboard qt5-xmlpatterns realtime-privileges reflector rng-tools sddm-kcm skanlite sof-firmware sox spectacle sshfs system-config-printer terminus-font timidity++ ttf-ubuntu-font-family ufw-extras unarchiver unrar unzip usb_modeswitch usbutils vdpauinfo vlc vorbis-tools vorbisgain wget xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xsane zip zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting "${nrg_plc}"" ;;
         3)
-        deskpkgs=""${basepkgs}" gnome networkmanager"
-        displaymanager="gdm"
-        bluetooth="bluetooth"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" gnome networkmanager"
+            displaymanager="gdm"
+            bluetooth="bluetooth"
+            network="NetworkManager" ;;
         4)
-        deskpkgs=""${basepkgs}" xfce4 lightdm-slick-greeter network-manager-applet"
-        displaymanager="lightdm"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" xfce4 lightdm-slick-greeter network-manager-applet"
+            displaymanager="lightdm"
+            network="NetworkManager" ;;
         5)
-        deskpkgs=""${basepkgs}" cinnamon blueberry lightdm-slick-greeter system-config-printer gnome-keyring ${terminal}"
-        displaymanager="lightdm"
-        bluetooth="bluetooth"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" cinnamon blueberry lightdm-slick-greeter system-config-printer gnome-keyring ${terminal}"
+            displaymanager="lightdm"
+            bluetooth="bluetooth"
+            network="NetworkManager" ;;
         6)
-        deskpkgs=""${basepkgs}" deepin deepin-terminal deepin-kwin networkmanager"
-        displaymanager="lightdm"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" deepin deepin-terminal deepin-kwin networkmanager"
+            displaymanager="lightdm"
+            network="NetworkManager" ;;
         7)
-        deskpkgs=""${basepkgs}" budgie lightdm-gtk-greeter arc-gtk-theme papirus-icon-theme network-manager-applet ${terminal}"
-        displaymanager="lightdm"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" budgie lightdm-gtk-greeter arc-gtk-theme papirus-icon-theme network-manager-applet ${terminal}"
+            displaymanager="lightdm"
+            network="NetworkManager" ;;
         8)
-        deskpkgs=""${basepkgs}" lxqt breeze-icons network-manager-applet sddm xscreensaver"
-        displaymanager="sddm"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" lxqt breeze-icons network-manager-applet sddm xscreensaver"
+            displaymanager="sddm"
+            network="NetworkManager" ;;
         9)
-        deskpkgs=""${basepkgs}" mate mate-terminal mate-media blueman network-manager-applet mate-power-manager system-config-printer lightdm-slick-greeter"
-        displaymanager="lightdm"
-        bluetooth="bluetooth"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" mate mate-terminal mate-media blueman network-manager-applet mate-power-manager system-config-printer lightdm-slick-greeter"
+            displaymanager="lightdm"
+            bluetooth="bluetooth"
+            network="NetworkManager" ;;
         10)
-        deskpkgs=""${basepkgs}" networkmanager"
-        network="NetworkManager";;
+            deskpkgs=""${basepkgs}" networkmanager"
+            network="NetworkManager" ;;
 #------------------------------------------------------------------------------------------
         11)
 
-        deskpkgs="base sudo "${kernel}" "${microcode}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${wireless_reg}" "${custompkgs}"";;
+        deskpkgs="base sudo "${kernel}" "${microcode}" "${vgapkgs}" "${fstools}" "${bootldr_pkgs}" "${wireless_reg}" "${custompkgs}"" ;;
 #------------------------------------------------------------------------------------------
     esac
 
@@ -3654,7 +3689,7 @@ ${purple}###${nc} Pacstrap System ${purple}###${nc}
 ###########################################################################################
 swapfile (){
 
-        prompt="Swapfile"
+        local prompt="Swapfile"
         sleep 0.5
         NC "
 ___________________________
@@ -3689,7 +3724,7 @@ FSTAB
 ###########################################################################################
 swapfile_btrfs (){
 
-        prompt="Btfrs Swapfile"
+        local prompt="Btfrs Swapfile"
         sleep 0.5
         NC "
 _________________________________
@@ -3722,7 +3757,7 @@ FSTAB
 ###########################################################################################
 wireless_regdom (){
 
-        prompt="Wireless-Regdom"
+        local prompt="Wireless-Regdom"
         sleep 0.5
         NC "
 __________________________________
@@ -3743,6 +3778,7 @@ REGDOM
 ###########################################################################################
 chroot_conf (){
 
+        local prompt="System"
         sleep 0.5
         NC "
 _________________________________
@@ -3750,9 +3786,7 @@ _________________________________
 ${purple}###${nc} Chroot & Configure System ${purple}###${nc}
         "
 
-    if [[ "${kernelnmbr}" == "3" ]]; then
-        swapmode="3"
-    fi
+    [[ "${kernelnmbr}" == "3" ]] && swapmode="3"
 
     if [[ "${encrypt}" == "yes" ]]; then
 
@@ -3874,7 +3908,8 @@ ${purple}###${nc} Chroot & Configure System ${purple}###${nc}
         ln -sf /usr/share/zoneinfo/$(curl -s http://ip-api.com/line?fields=timezone) /etc/localtime &&
         hwclock --systohc &&
         echo ${HOSTNAME} > /etc/hostname &&
-        echo "127.0.0.1 localhost
+        echo "
+        127.0.0.1 localhost
         ::1 localhost
         127.0.1.1 ${HOSTNAME}.localdomain ${HOSTNAME}" >> /etc/hosts &&
         echo root:${ROOTPASSWD2} | chpasswd &&
@@ -3905,7 +3940,8 @@ LIGHTDM
             arch-chroot /mnt <<-BOOTCTL
             bootctl install --graceful &&
             echo "default arch.conf" > /boot/loader/loader.conf &&
-            echo "title ${entrname}
+            echo "
+            title ${entrname}
             linux /vmlinuz-${kernel}
             initrd /${microcode}.img
             initrd /initramfs-${kernel}.img
@@ -3941,7 +3977,8 @@ NVIDIAGRUB
         if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
             if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
                 arch-chroot /mnt <<-NVIDIAHOOK
-                echo "[Trigger]
+                echo "
+                [Trigger]
                 Operation=Install
                 Operation=Upgrade
                 Operation=Remove
@@ -3960,13 +3997,8 @@ NVIDIAHOOK
         fi
 
         if [[ "$?" -eq 0 ]]; then
-            NC "
-
-
-
-==> [${green}System OK${nc}] "
-            sleep 1
-
+            ok
+            completion
         else
             err_instl_abort
         fi
@@ -4012,10 +4044,12 @@ NRG
         ln -sf /usr/share/zoneinfo/$(curl -s http://ip-api.com/line?fields=timezone) /etc/localtime &&
         hwclock --systohc &&
         echo ${HOSTNAME} > /etc/hostname &&
-        echo "127.0.0.1 localhost
+        echo "
+        127.0.0.1 localhost
         ::1 localhost
         127.0.1.1 ${HOSTNAME}.localdomain ${HOSTNAME}" >> /etc/hosts &&
-        echo "net.core.netdev_max_backlog = 16384
+        echo "
+        net.core.netdev_max_backlog = 16384
         net.core.somaxconn = 8192
         net.core.rmem_default = 1048576
         net.core.rmem_max = 16777216
@@ -4046,9 +4080,11 @@ NRG
         vm.mmap_min_addr = 65536
         kernel.printk = 0 0 0 0
         ${perf_stream}" | tee /etc/sysctl.d/99-performance.conf &&
-        echo "[defaults]
+        echo "
+        [defaults]
         ntfs:ntfs3_defaults=uid=1000,gid=1000" | tee /etc/udisks2/mount_options.conf &&
-        echo '// Original rules: https://github.com/coldfix/udiskie/wiki/Permissions
+        echo '
+        // Original rules: https://github.com/coldfix/udiskie/wiki/Permissions
         // Changes: Added org.freedesktop.udisks2.filesystem-mount-system, as this is used by Dolphin.
 
         polkit.addRule(function(action, subject) {
@@ -4079,22 +4115,26 @@ NRG
         }
         });' | tee /etc/polkit-1/rules.d/99-udisks2.rules &&
         mkdir -p /etc/systemd/journald.conf.d &&
-        echo "[Journal]
+        echo "
+        [Journal]
         SystemMaxUse=100M" | tee /etc/systemd/journald.conf.d/00-journald.conf &&
         mkdir -p /etc/systemd/user.conf.d &&
-        echo "[Manager]
+        echo "
+        [Manager]
         DefaultTimeoutStopSec=5s
         DefaultTimeoutAbortSec=5s" | tee /etc/systemd/user.conf.d/00-user.conf &&
         sed -i 's|^hosts.*|hosts: mymachines mdns_minimal resolve [!UNAVAIL=return] files myhostname dns|g' /etc/nsswitch.conf &&
         sed -i 's/ interface = [^ ]*/ interface = all/g' /etc/ipp-usb/ipp-usb.conf &&
         sed -i "/# set linenumbers/"'s/^#//' /etc/nanorc &&
         echo tcp_bbr | tee /etc/modules-load.d/modules.conf &&
-        echo "country=${REGDOM}
+        echo "
+        country=${REGDOM}
         wps_cred_add_sae=1
         pmf=2" | tee /etc/wpa_supplicant/wpa_supplicant.conf &&
         bootctl install --graceful &&
         echo "default arch.conf" > /boot/loader/loader.conf &&
-        echo "title ${entrname}
+        echo "
+        title ${entrname}
         linux /vmlinuz-${kernel}
         initrd /${microcode}.img
         initrd /initramfs-${kernel}.img
@@ -4103,7 +4143,8 @@ NRG
         chsh -s /bin/zsh &&
         useradd -m -G wheel,realtime -s /bin/zsh ${USERNAME} &&
         echo ${USERNAME}:${USERPASSWD2} | chpasswd &&
-        echo "Defaults env_reset
+        echo "
+        Defaults env_reset
         Defaults pwfeedback
         Defaults editor=/usr/bin/nano
         %wheel ALL=(ALL) ALL" | tee /etc/sudoers.d/sudoedits &&
@@ -4114,7 +4155,8 @@ OPTIMIZED
         if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
             if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
                 arch-chroot /mnt <<-NVIDIAHOOK
-                echo "[Trigger]
+                echo "
+                [Trigger]
                 Operation=Install
                 Operation=Upgrade
                 Operation=Remove
@@ -4133,12 +4175,8 @@ NVIDIAHOOK
         fi
 
         if [[ "$?" -eq 0 ]]; then
-            NC "
-
-
-
-==> [${green}System OK${nc}] "
-            sleep 1
+            ok
+            completion
         else
             err_instl_abort
         fi
@@ -4161,7 +4199,8 @@ NVIDIAHOOK
         ln -sf /usr/share/zoneinfo/$(curl -s http://ip-api.com/line?fields=timezone) /etc/localtime &&
         hwclock --systohc &&
         echo ${HOSTNAME} > /etc/hostname &&
-        echo "127.0.0.1 localhost
+        echo "
+        127.0.0.1 localhost
         ::1 localhost
         127.0.1.1 ${HOSTNAME}.localdomain ${HOSTNAME}" >> /etc/hosts &&
         echo root:${ROOTPASSWD2} | chpasswd &&
@@ -4176,7 +4215,8 @@ CUSTOM
             arch-chroot /mnt <<-BOOTCTL
             bootctl install --graceful &&
             echo "default arch.conf" > /boot/loader/loader.conf &&
-            echo "title ${entrname}
+            echo "
+            title ${entrname}
             linux /vmlinuz-${kernel}
             initrd /${microcode}.img
             initrd /initramfs-${kernel}.img
@@ -4209,7 +4249,8 @@ NVIDIAGRUB
         if [[ "${vgaconf}" == "y" && "${vendor}" == "Nvidia" ]]; then
             if [[ "${kernelnmbr}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "1" ]] || [[ "${kernelnmbr}" == "2" && "${family}" == "2" && ${nvdriver} == "2" ]]; then
                 arch-chroot /mnt <<-NVIDIAHOOK
-                echo "[Trigger]
+                echo "
+                [Trigger]
                 Operation=Install
                 Operation=Upgrade
                 Operation=Remove
@@ -4228,25 +4269,21 @@ NVIDIAHOOK
         fi
 
         if [[ "$?" -eq 0 ]]; then
-            NC "
-
-
-
-==> [${green}System OK${nc}] "
-            sleep 1
+            ok
+            completion
         else
             err_instl_abort
         fi
     fi
 
-    completion="yes"
+        umount -R /mnt
+        exit
 }
-
 # ### END FUNCTIONS ###
 ###########################################################################################
 
         clear
-        set -e
+        set -eo pipefail
         run_as="$(whoami)"
         tty="$(tty)"
         disks="$(lsblk --nodeps --paths --noheadings --output=name,size,model | cat --number)"
@@ -4281,19 +4318,3 @@ NVIDIAHOOK
         upd_clock
         dtct_microcode
         until main_menu; do : ; done
-        umount -R /mnt
-        sleep 0.5
-        CYAN "
-
-*******************************
-
-###  Installation Complete  ###
-
-
- $(date)
-
-******************************* 
-
-
-        "
-        sleep 1
