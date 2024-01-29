@@ -211,7 +211,9 @@ In this step, you will be presented with a list of setups to choose from:
 
 - All desktops (except "Optimized Plasma") are completely "Vanilla", and come with network support (networkmanager). For any additional functionality, please consult the Archwiki.
 
-- "Optimized Plasma" will install an optimized KDE Plasma version plus additional software, systemd-boot loader and Wayland.
+- The installer offers the convenient option to set your own kernel parameters on-the-fly for any selected Desktop Setup.
+
+- "Optimized Plasma" will install a KDE Plasma system-optimized version plus additional software, systemd-boot loader and Wayland.
 
 You'll find my preferred packages inside the "deskpkgs" variable and all of my configurations at the involved part of the "chroot_conf" function.
 
@@ -227,7 +229,7 @@ You'll find my preferred packages inside the "deskpkgs" variable and all of my c
 - [ ]  Custom Kernel Parameters Setup
 ---------------------------------------------------------------
 
-It offers just the minimal configuration required to make your system run.
+It offers only the minimal configuration required to make your system run.
 
 
 - ### EFI Boot Entries Deletion: [Interactive - Skippable]
