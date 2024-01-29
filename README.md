@@ -222,10 +222,9 @@ You'll find my preferred packages inside the "deskpkgs" variable and all of my c
 
 - ### Custom System Setup [Interactive]
 
-- [ ]  1. Add Packages to be Installed
-- [ ]  2. Add Services to be Enabled
-- [ ]  3. Add Kernel Parameters to be Set at boot time
-- [ ]  4. Done
+- [ ]  Custom Packages Setup
+- [ ]  Custom Services Setup
+- [ ]  Custom Kernel Parameters Setup
 ---------------------------------------------------------------
 
 It offers just the minimal configuration required to make your system run.
