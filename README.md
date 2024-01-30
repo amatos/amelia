@@ -211,7 +211,7 @@ In this step, you will be presented with a list of setups to choose from:
 
 - All desktops (except "Optimized Plasma") are completely "Vanilla", and come with network support (networkmanager). For any additional functionality, please consult the Archwiki.
 
-- The installer offers the convenient option to set your own kernel parameters on-the-fly for any selected Desktop Setup.
+- The installer offers the convenient option to set your own kernel parameters fir boot, on-the-fly, while at 'Desktop Selection' stage.
 
 - "Optimized Plasma" will install a KDE Plasma system-optimized version plus additional software, systemd-boot loader and Wayland.
 
